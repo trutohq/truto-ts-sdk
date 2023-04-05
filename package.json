@@ -1,6 +1,7 @@
 {
-  "name": "truto-ts-sdk",
-  "version": "1.0.0",
+  "name": "@truto/truto-ts-sdk",
+  "private": false,
+  "version": "1.0.1",
   "description": "Truto REST API SDK for TypeScript. Works in NodeJS & Cloudflare Workers.",
   "source": "src/index.ts",
   "main": "dist/main.js",
