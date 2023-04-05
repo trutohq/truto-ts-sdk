@@ -36,7 +36,6 @@
   "scripts": {
     "dev": "parcel watch",
     "build": "parcel build",
-    "prepublishOnly": "NODE_ENV=production yarn build",
     "check": "tsc --noEmit"
   }
 }
