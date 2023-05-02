@@ -10,6 +10,11 @@
   "main": "dist/main.js",
   "types": "dist/types.d.ts",
   "module": "dist/module.js",
+  "targets": {
+    "main": {
+      "includeNodeModules": ["node-fetch", "lodash-es", "qs"]
+    }
+  },
   "license": "MIT",
   "volta": {
     "node": "18.13.0",
@@ -40,6 +45,7 @@
   "scripts": {
     "dev": "parcel watch",
     "build": "parcel build",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "prepublishOnly": "yarn build"
   }
 }
