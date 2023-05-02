@@ -15,7 +15,6 @@ export class IntegrationResource {
   public create(body: Partial<any>) {
     return this.apiClient.create<any>('integration', body)
   }
-
   public install(id: string, options: { is_enabled?: boolean } = {}) {
     return this.apiClient.create<any>('environment-integration', {
       integration_id: id,
