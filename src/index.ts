@@ -12,22 +12,22 @@ import { UnifiedApi } from './resources/unifiedApi'
 import { ProxyApi } from './resources/proxyApi'
 
 export type TrutoApiOptions = {
-  baseUrl: string
+  baseUrl?: string
   token: string
 }
 
 export default class TrutoApi {
   public team: TeamResource
   public integration: IntegrationResource
-  private environment: EnvironmentResource
-  private installedIntegration: InstalledIntegrationResource
-  private installedUnifiedModel: InstalledUnifiedModelResource
-  private integratedAccount: IntegratedAccountResource
-  private linkToken: LinkTokenResource
-  private user: UserResource
-  private unifiedModel: UnifiedModelResource
-  private unifiedApi: UnifiedApi
-  private proxyApi: ProxyApi
+  public environment: EnvironmentResource
+  public installedIntegration: InstalledIntegrationResource
+  public installedUnifiedModel: InstalledUnifiedModelResource
+  public integratedAccount: IntegratedAccountResource
+  public linkToken: LinkTokenResource
+  public user: UserResource
+  public unifiedModel: UnifiedModelResource
+  public unifiedApi: UnifiedApi
+  public proxyApi: ProxyApi
 
   constructor(options: TrutoApiOptions) {
     const apiClient = new ApiClient(options)

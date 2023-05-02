@@ -4,30 +4,45 @@
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/25523816-b3550004-776b-4372-be86-562791b192ce?action=collection%2Ffork&collection-url=entityId%3D25523816-b3550004-776b-4372-be86-562791b192ce%26entityType%3Dcollection%26workspaceId%3D7cc4fe33-eb97-4dc7-98b5-2a7ff2e94e67)
 
+## Requires
+
+NodeJS 16+
+
 ## Installation
 
 Install the package via npm:
 ```bash
-npm install truto-ts-sdk
+npm install @truto/truto-ts-sdk
 ```
 
 or via yarn:
 
 ```bash
-yarn add truto-ts-sdk
+yarn add @truto/truto-ts-sdk
 ```
 
 ## Usage
-Here's an example of how to use `truto-ts-sdk`:
+Here's an example of how to use `@truto/truto-ts-sdk`:
 
+### ESM Import
 ```javascript
-import TrutoApi from 'truto-ts-sdk'
+import TrutoApi from '@truto/truto-ts-sdk'
+```
 
+### CommonJS Import
+If you have not yet switched to ESM (`"type": "module"`) in your NodeJS project, then you can use the dynamic import syntax:
+```javascript
+const { default: TrutoSdk } = await import('@truto/truto-ts-sdk');
+```
+### Initializing the client
+```javascript
 const trutoApi = new TrutoApi({
-  baseUrl: 'https://api.truto.one',
   token: process.env.TRUTO_API_TOKEN,
 })
+```
 
+### Calling the APIs
+```javascript
 // Fetch all installed integrations
 const installedIntegrations = await trutoApi.installedIntegration.list()
 for await (const installedIntegration of installedIntegrations) {
@@ -38,9 +53,7 @@ for await (const installedIntegration of installedIntegrations) {
 const integratedAccounts = await trutoApi.integratedAccount.list({
   tenant_id: 'acme-1',
 })
-for await (const integratedAccount of integratedAccounts) {
-  console.log(integratedAccount)
-}
+console.log(await integratedAccount.toArray()) // To fetch all
 
 // Install an integration to the environment the API token is associated with
 await trutoApi.integration.install('32b122db-ad24-400f-8ee7-0be21edc12ef')
