@@ -2,7 +2,7 @@ import fetch, { RequestInit } from 'node-fetch'
 import * as qs from 'qs'
 
 export type ApiClientOptions = {
-  baseUrl: string
+  baseUrl?: string
   token: string
 }
 
@@ -11,7 +11,7 @@ export class ApiClient {
   private token: string
 
   constructor(options: ApiClientOptions) {
-    this.baseUrl = options.baseUrl
+    this.baseUrl = options.baseUrl || 'https://api.truto.one'
     this.token = options.token
   }
 

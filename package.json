@@ -4,19 +4,16 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Truto REST API SDK for TypeScript. Works in NodeJS & Cloudflare Workers.",
   "source": "src/index.ts",
   "main": "dist/main.js",
   "types": "dist/types.d.ts",
   "module": "dist/module.js",
+  "type": "module",
   "targets": {
     "main": {
-      "includeNodeModules": [
-        "node-fetch",
-        "lodash-es",
-        "qs"
-      ]
+      "includeNodeModules": true
     }
   },
   "license": "MIT",
@@ -48,7 +45,7 @@
   },
   "scripts": {
     "dev": "parcel watch",
-    "build": "parcel build",
+    "build": "rm -rf dist && parcel build",
     "check": "tsc --noEmit",
     "prepublishOnly": "yarn build"
   }
