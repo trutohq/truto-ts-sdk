@@ -6,88 +6,88 @@ export class UnifiedApi {
   constructor(private apiClient: ApiClient) {}
   public list(
     options: PaginationOptions & {
-      category: string
+      unified_model: string
       resource: string
       integrated_account_id: string
     }
   ) {
     return new Cursor<any>(
       this.apiClient,
-      `unified/${options.category}/${options.resource}`,
-      omit(options, ['category', 'resource'])
+      `unified/${options.unified_model}/${options.resource}`,
+      omit(options, ['unified_model', 'resource'])
     )
   }
   public get(
     id: string,
     options: PaginationOptions & {
-      category: string
+      unified_model: string
       resource: string
       integrated_account_id: string
     }
   ) {
     return this.apiClient.get<any>(
-      `unified/${options.category}/${options.resource}`,
+      `unified/${options.unified_model}/${options.resource}`,
       id,
-      omit(options, ['category', 'resource'])
+      omit(options, ['unified_model', 'resource'])
     )
   }
   public update(
     id: string,
     body: Partial<any>,
     options: PaginationOptions & {
-      category: string
+      unified_model: string
       resource: string
       integrated_account_id: string
     }
   ) {
-    return this.apiClient.update<any>(
-      `unified/${options.category}/${options.resource}`,
+    return this.apiClient.update<any, any>(
+      `unified/${options.unified_model}/${options.resource}`,
       id,
       body,
-      omit(options, ['category', 'resource'])
+      omit(options, ['unified_model', 'resource'])
     )
   }
   public create(
     body: Partial<any>,
     options: PaginationOptions & {
-      category: string
+      unified_model: string
       resource: string
       integrated_account_id: string
     }
   ) {
-    return this.apiClient.create<any>(
-      `unified/${options.category}/${options.resource}`,
+    return this.apiClient.create<any, any>(
+      `unified/${options.unified_model}/${options.resource}`,
       body,
-      omit(options, ['category', 'resource'])
+      omit(options, ['unified_model', 'resource'])
     )
   }
   public delete(
     id: string,
     options: PaginationOptions & {
-      category: string
+      unified_model: string
       resource: string
       integrated_account_id: string
     }
   ) {
     return this.apiClient.delete(
-      `unified/${options.category}/${options.resource}`,
+      `unified/${options.unified_model}/${options.resource}`,
       id,
-      omit(options, ['category', 'resource'])
+      omit(options, ['unified_model', 'resource'])
     )
   }
 
   public meta(
     method: string,
     options: PaginationOptions & {
-      category: string
+      unified_model: string
       resource: string
       integrated_account_id: string
     }
   ) {
     return this.apiClient.get<any>(
-      `unified/${options.category}/${options.resource}/meta`,
+      `unified/${options.unified_model}/${options.resource}/meta`,
       method,
-      omit(options, ['category', 'resource'])
+      omit(options, ['unified_model', 'resource'])
     )
   }
 }

@@ -10,6 +10,6 @@ export class TeamResource {
     return this.apiClient.get<any>('team', id)
   }
   public update(id: string, body: Partial<any>) {
-    return this.apiClient.update<any>('team', id, body)
+    return this.apiClient.update<any, any>('team', id, body)
   }
 }

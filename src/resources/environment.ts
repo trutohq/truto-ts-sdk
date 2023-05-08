@@ -10,6 +10,6 @@ export class EnvironmentResource {
     return this.apiClient.get<any>('environment', id)
   }
   public update(id: string, body: Partial<any>) {
-    return this.apiClient.update<any>('environment', id, body)
+    return this.apiClient.update<any, any>('environment', id, body)
   }
 }

@@ -38,7 +38,7 @@ export class ProxyApi {
       integrated_account_id: string
     }
   ) {
-    return this.apiClient.update<any>(
+    return this.apiClient.update<any, any>(
       `proxy/${queryParams.resource}`,
       id,
       body,
@@ -52,7 +52,7 @@ export class ProxyApi {
       integrated_account_id: string
     }
   ) {
-    return this.apiClient.create<any>(
+    return this.apiClient.create<any, any>(
       `proxy/${queryParams.resource}`,
       body,
       omit(queryParams, ['resource'])

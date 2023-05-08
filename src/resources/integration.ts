@@ -10,13 +10,13 @@ export class IntegrationResource {
     return this.apiClient.get<any>('integration', id)
   }
   public update(id: string, body: Partial<any>) {
-    return this.apiClient.update<any>('integration', id, body)
+    return this.apiClient.update<any, any>('integration', id, body)
   }
   public create(body: Partial<any>) {
-    return this.apiClient.create<any>('integration', body)
+    return this.apiClient.create<any, any>('integration', body)
   }
   public install(id: string, options: { is_enabled?: boolean } = {}) {
-    return this.apiClient.create<any>('environment-integration', {
+    return this.apiClient.create<any, any>('environment-integration', {
       integration_id: id,
       ...options,
     })
