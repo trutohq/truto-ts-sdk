@@ -3,17 +3,17 @@ import { PaginationOptions, Cursor } from '../pagination'
 
 export class IntegratedAccountResource {
   constructor(private apiClient: ApiClient) {}
-  public list(options?: PaginationOptions) {
-    return new Cursor<any>(this.apiClient, 'integrated-account', options)
+  public list<T = any>(options?: PaginationOptions) {
+    return new Cursor<T>(this.apiClient, 'integrated-account', options)
   }
-  public get(id: string) {
-    return this.apiClient.get<any>('integrated-account', id)
+  public get<T = any>(id: string) {
+    return this.apiClient.get<T>('integrated-account', id)
   }
   public update(id: string, body: Partial<any>) {
-    return this.apiClient.update<any>('integrated-account', id, body)
+    return this.apiClient.update<any, any>('integrated-account', id, body)
   }
   public create(body: Partial<any>) {
-    return this.apiClient.create<any>('integrated-account', body)
+    return this.apiClient.create<any, any>('integrated-account', body)
   }
   public delete(id: string) {
     return this.apiClient.delete('integrated-account', id)

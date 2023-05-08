@@ -6,7 +6,7 @@ export class LinkTokenResource {
     tenant_id: string
     unified_model_id?: string
   }) {
-    return this.apiClient.create<any>('link-token', {
+    return this.apiClient.create<any, any>('link-token', {
       tenant_id: options.tenant_id,
       unified_model_id: options.unified_model_id,
     })
@@ -16,7 +16,7 @@ export class LinkTokenResource {
     integrated_account_id: string
     unified_model_id?: string
   }) {
-    return this.apiClient.create<any>('link-token', {
+    return this.apiClient.create<any, any>('link-token', {
       integrated_account_id: options.integrated_account_id,
       unified_model_id: options.unified_model_id,
     })

@@ -10,6 +10,9 @@ import { UserResource } from './resources/user'
 import { UnifiedModelResource } from './resources/unifiedModel'
 import { UnifiedApi } from './resources/unifiedApi'
 import { ProxyApi } from './resources/proxyApi'
+import { DaemonResource } from './resources/daemon'
+import { SyncJobResource } from './resources/syncJob'
+import { SyncJobRunResource } from './resources/syncJobRun'
 
 export type TrutoApiOptions = {
   baseUrl?: string
@@ -28,6 +31,9 @@ export default class TrutoApi {
   public unifiedModel: UnifiedModelResource
   public unifiedApi: UnifiedApi
   public proxyApi: ProxyApi
+  public daemon: DaemonResource
+  public syncJob: SyncJobResource
+  public syncJobRun: SyncJobRunResource
 
   constructor(options: TrutoApiOptions) {
     const apiClient = new ApiClient(options)
@@ -42,5 +48,10 @@ export default class TrutoApi {
     this.unifiedModel = new UnifiedModelResource(apiClient)
     this.unifiedApi = new UnifiedApi(apiClient)
     this.proxyApi = new ProxyApi(apiClient)
+    this.daemon = new DaemonResource(apiClient)
+    this.syncJob = new SyncJobResource(apiClient)
+    this.syncJobRun = new SyncJobRunResource(apiClient)
   }
 }
+
+export { Cursor } from './pagination'

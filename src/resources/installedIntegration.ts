@@ -10,7 +10,7 @@ export class InstalledIntegrationResource {
     return this.apiClient.get<any>('environment-integration', id)
   }
   public update(id: string, body: Partial<any>) {
-    return this.apiClient.update<any>('environment-integration', id, body)
+    return this.apiClient.update<any, any>('environment-integration', id, body)
   }
   public delete(id: string) {
     return this.apiClient.delete('environment-integration', id)

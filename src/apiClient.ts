@@ -50,12 +50,14 @@ export class ApiClient {
     queryParams?: Record<string, unknown>
   ): Promise<T> {
     const queryString = qs.stringify(queryParams)
-    return this.request<T>(`/${resource}/${id}?${queryString}`)
+    return this.request<T>(
+      `/${resource}/${encodeURIComponent(id)}?${queryString}`
+    )
   }
 
-  public async create<T>(
+  public async create<T, U>(
     resource: string,
-    body: T,
+    body: U,
     queryParams?: Record<string, unknown>
   ): Promise<T> {
     const queryString = qs.stringify(queryParams)
@@ -65,17 +67,20 @@ export class ApiClient {
     })
   }
 
-  public async update<T>(
+  public async update<T, U>(
     resource: string,
     id: string,
-    body: Partial<T>,
+    body: U,
     queryParams?: Record<string, unknown>
   ): Promise<T> {
     const queryString = qs.stringify(queryParams)
-    return this.request<T>(`/${resource}/${id}?${queryString}`, {
-      method: 'PATCH',
-      body: JSON.stringify(body),
-    })
+    return this.request<T>(
+      `/${resource}/${encodeURIComponent(id)}?${queryString}`,
+      {
+        method: 'PATCH',
+        body: JSON.stringify(body),
+      }
+    )
   }
 
   public async delete(
@@ -84,8 +89,11 @@ export class ApiClient {
     queryParams?: Record<string, unknown>
   ): Promise<void> {
     const queryString = qs.stringify(queryParams)
-    await this.request<void>(`/${resource}/${id}?${queryString}`, {
-      method: 'DELETE',
-    })
+    await this.request<void>(
+      `/${resource}/${encodeURIComponent(id)}?${queryString}`,
+      {
+        method: 'DELETE',
+      }
+    )
   }
 }
