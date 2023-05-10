@@ -2,8 +2,8 @@ import { ApiClient } from './apiClient'
 import { TeamResource } from './resources/team'
 import { IntegrationResource } from './resources/integration'
 import { EnvironmentResource } from './resources/environment'
-import { InstalledIntegrationResource } from './resources/installedIntegration'
-import { InstalledUnifiedModelResource } from './resources/installedUnifiedModel'
+import { EnvironmentIntegrationResource } from './resources/environmentIntegration.js'
+import { EnvironmentUnifiedModelResource } from './resources/environmentUnifiedModel'
 import { IntegratedAccountResource } from './resources/integratedAccount'
 import { LinkTokenResource } from './resources/linkToken'
 import { UserResource } from './resources/user'
@@ -23,8 +23,8 @@ export default class TrutoApi {
   public team: TeamResource
   public integration: IntegrationResource
   public environment: EnvironmentResource
-  public installedIntegration: InstalledIntegrationResource
-  public installedUnifiedModel: InstalledUnifiedModelResource
+  public environmentIntegration: EnvironmentIntegrationResource
+  public environmentUnifiedModel: EnvironmentUnifiedModelResource
   public integratedAccount: IntegratedAccountResource
   public linkToken: LinkTokenResource
   public user: UserResource
@@ -40,8 +40,10 @@ export default class TrutoApi {
     this.team = new TeamResource(apiClient)
     this.integration = new IntegrationResource(apiClient)
     this.environment = new EnvironmentResource(apiClient)
-    this.installedIntegration = new InstalledIntegrationResource(apiClient)
-    this.installedUnifiedModel = new InstalledUnifiedModelResource(apiClient)
+    this.environmentIntegration = new EnvironmentIntegrationResource(apiClient)
+    this.environmentUnifiedModel = new EnvironmentUnifiedModelResource(
+      apiClient
+    )
     this.integratedAccount = new IntegratedAccountResource(apiClient)
     this.linkToken = new LinkTokenResource(apiClient)
     this.user = new UserResource(apiClient)

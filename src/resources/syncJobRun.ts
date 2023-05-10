@@ -1,26 +1,66 @@
 import { ApiClient } from '../apiClient'
 import { PaginationOptions, Cursor } from '../pagination'
 
+export type SyncJobRun = {
+  id: string
+  args?: Record<string, unknown>
+  resources?: Record<string, unknown>
+  sync_job_id: string
+  integrated_account_id: string
+  status: string
+  daemon_id: string
+  daemon_group_key: string
+  created_at: string
+  started_at?: string
+  finished_at?: string
+  updated_at: string
+}
+
+export type SyncJobRunCreatePayload = {
+  args?: Record<string, unknown>
+  resources?: Record<string, unknown>
+  sync_job_id: string
+  integrated_account_id: string
+  status: string
+  daemon_id: string
+  daemon_group_key: string
+}
+
+export type SyncJobRunPatchPayload = {
+  status?: string
+  started_at?: string
+  finished_at?: string
+}
+
 export class SyncJobRunResource {
   constructor(private apiClient: ApiClient) {}
-  public list<T = any>(options?: PaginationOptions) {
-    return new Cursor<T>(this.apiClient, 'sync-job-run', options)
+  public list(options?: PaginationOptions) {
+    return new Cursor<SyncJobRun>(this.apiClient, 'sync-job-run', options)
   }
-  public get<T = any>(id: string, queryParams?: Record<string, unknown>) {
-    return this.apiClient.get<T>('sync-job-run', id, queryParams)
+  public get(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.get<SyncJobRun>('sync-job-run', id, queryParams)
   }
-  public update<T = any, U = any>(
+  public update(
     id: string,
-    body: U,
+    body: SyncJobRunPatchPayload,
     queryParams?: Record<string, unknown>
   ) {
-    return this.apiClient.update<T, U>('sync-job-run', id, body, queryParams)
+    return this.apiClient.update<SyncJobRun, SyncJobRunPatchPayload>(
+      'sync-job-run',
+      id,
+      body,
+      queryParams
+    )
   }
-  public create<T = any, U = any>(
-    body: U,
+  public create(
+    body: SyncJobRunCreatePayload,
     queryParams?: Record<string, unknown>
   ) {
-    return this.apiClient.create<T, U>('sync-job-run', body, queryParams)
+    return this.apiClient.create<SyncJobRun, SyncJobRunCreatePayload>(
+      'sync-job-run',
+      body,
+      queryParams
+    )
   }
 
   public delete(id: string) {
