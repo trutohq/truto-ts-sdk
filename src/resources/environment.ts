@@ -1,15 +1,31 @@
 import { ApiClient } from '../apiClient'
 import { PaginationOptions, Cursor } from '../pagination'
 
+export type Environment = {
+  id: string
+  name: string
+  team_id: string
+  created_at: string
+  updated_at: string
+}
+
+export type EnvironmentUpdatePayload = {
+  name?: string
+}
+
 export class EnvironmentResource {
   constructor(private apiClient: ApiClient) {}
   public list(options?: PaginationOptions) {
-    return new Cursor<any>(this.apiClient, 'environment', options)
+    return new Cursor<Environment>(this.apiClient, 'environment', options)
   }
   public get(id: string) {
-    return this.apiClient.get<any>('environment', id)
+    return this.apiClient.get<Environment>('environment', id)
   }
-  public update(id: string, body: Partial<any>) {
-    return this.apiClient.update<any, any>('environment', id, body)
+  public update(id: string, body: EnvironmentUpdatePayload) {
+    return this.apiClient.update<Environment, EnvironmentUpdatePayload>(
+      'environment',
+      id,
+      body
+    )
   }
 }

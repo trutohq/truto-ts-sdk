@@ -87,9 +87,9 @@ export class ApiClient {
     resource: string,
     id: string,
     queryParams?: Record<string, unknown>
-  ): Promise<void> {
+  ): Promise<{ id: string }> {
     const queryString = qs.stringify(queryParams)
-    await this.request<void>(
+    return this.request<{ id: string }>(
       `/${resource}/${encodeURIComponent(id)}?${queryString}`,
       {
         method: 'DELETE',
