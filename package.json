@@ -22,11 +22,11 @@
   },
   "targets": {
     "main": {
-      "includeNodeModules": ["lodash-es", "qs"],
+      "includeNodeModules": true,
       "isLibrary": true
     },
     "module": {
-      "includeNodeModules": ["lodash-es", "qs"],
+      "includeNodeModules": true,
       "isLibrary": true
     }
   },
