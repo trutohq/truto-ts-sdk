@@ -6,6 +6,7 @@
   },
   "version": "1.0.8",
   "description": "Truto REST API SDK for TypeScript. Works in NodeJS & Cloudflare Workers.",
+  "repository": "https://github.com/trutohq/truto-ts-sdk.git",
   "source": "src/index.ts",
   "main": "dist/main.cjs",
   "module": "dist/module.js",
