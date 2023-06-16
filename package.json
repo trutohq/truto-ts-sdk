@@ -22,14 +22,12 @@
   },
   "targets": {
     "main": {
-      "includeNodeModules": true,
-      "isLibrary": true,
-      "context": "browser"
+      "includeNodeModules": ["lodash-es", "qs"],
+      "isLibrary": true
     },
     "module": {
-      "includeNodeModules": true,
-      "isLibrary": true,
-      "context": "browser"
+      "includeNodeModules": ["lodash-es", "qs"],
+      "isLibrary": true
     }
   },
   "type": "module",
@@ -56,7 +54,7 @@
     "typescript": "4.9.5"
   },
   "dependencies": {
-    "isomorphic-unfetch": "4.0.2",
+    "ofetch": "1.1.0",
     "lodash-es": "4.17.21",
     "qs": "6.11.1"
   },
