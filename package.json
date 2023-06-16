@@ -4,16 +4,27 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Truto REST API SDK for TypeScript. Works in NodeJS & Cloudflare Workers.",
+  "repository": "https://github.com/trutohq/truto-ts-sdk.git",
   "source": "src/index.ts",
-  "main": "dist/main.js",
-  "types": "dist/types.d.ts",
+  "main": "dist/main.cjs",
   "module": "dist/module.js",
-  "type": "module",
+  "types": "dist/types.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/main.cjs",
+      "import": "./dist/module.js"
+    }
+  },
   "targets": {
     "main": {
-      "includeNodeModules": true
+      "includeNodeModules": true,
+      "isLibrary": true
+    },
+    "module": {
+      "includeNodeModules": true,
+      "isLibrary": true
     }
   },
   "license": "MIT",

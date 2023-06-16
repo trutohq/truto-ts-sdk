@@ -30,9 +30,8 @@ import TrutoApi from '@truto/truto-ts-sdk'
 ```
 
 ### CommonJS Import
-If you have not yet switched to ESM (`"type": "module"`) in your NodeJS project, then you can use the dynamic import syntax:
 ```javascript
-const { default: TrutoSdk } = await import('@truto/truto-ts-sdk');
+const { default: TrutoApi } = require('@truto/truto-ts-sdk');
 ```
 ### Initializing the client
 ```javascript
@@ -44,7 +43,7 @@ const trutoApi = new TrutoApi({
 ### Calling the APIs
 ```javascript
 // Fetch all installed integrations
-const installedIntegrations = await trutoApi.installedIntegration.list()
+const installedIntegrations = await trutoApi.environmentIntegration.list()
 for await (const installedIntegration of installedIntegrations) {
   console.log(installedIntegration)
 }
