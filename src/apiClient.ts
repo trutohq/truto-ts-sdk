@@ -30,12 +30,7 @@ export class ApiClient {
       headers,
     })
 
-    if (!response.ok) {
-      console.error(await response.text())
-      throw new Error(`API request failed: ${response.statusText}`)
-    }
-
-    return response.json() as T
+    return response as T
   }
 
   public async list<T>(

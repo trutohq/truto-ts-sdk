@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Truto REST API SDK for TypeScript. Works in NodeJS & Cloudflare Workers.",
   "repository": "https://github.com/trutohq/truto-ts-sdk.git",
   "source": "src/index.ts",
@@ -22,17 +22,11 @@
   },
   "targets": {
     "main": {
-      "includeNodeModules": [
-        "lodash-es",
-        "qs"
-      ],
+      "includeNodeModules": true,
       "isLibrary": true
     },
     "module": {
-      "includeNodeModules": [
-        "lodash-es",
-        "qs"
-      ],
+      "includeNodeModules": true,
       "isLibrary": true
     }
   },
