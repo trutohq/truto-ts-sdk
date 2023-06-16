@@ -1,6 +1,6 @@
 # truto-ts-sdk
 
-`truto-ts-sdk` is a TypeScript/JavaScript library to interact with the Truto API, a powerful integration platform for connecting multiple SaaS applications. The SDK mirrors the Truto REST API, endpoints for which are documented in the Truto Postman Collection.
+`truto-ts-sdk` is a TypeScript/JavaScript library to interact with the Truto API, a powerful integration platform for connecting multiple SaaS applications. The SDK mirrors the Truto REST API, endpoints which are documented in the Truto Postman Collection.
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/25523816-b3550004-776b-4372-be86-562791b192ce?action=collection%2Ffork&collection-url=entityId%3D25523816-b3550004-776b-4372-be86-562791b192ce%26entityType%3Dcollection%26workspaceId%3D7cc4fe33-eb97-4dc7-98b5-2a7ff2e94e67)
 
@@ -60,16 +60,18 @@ await trutoApi.integration.install('32b122db-ad24-400f-8ee7-0be21edc12ef')
 
 // Make a request to the unified API
 const unifiedApiCursor = await trutoApi.unifiedApi.list({
-  category: 'accounting',
+  unified_model: 'accounting',
   resource: 'accounts',
   integrated_account_id: '766cc1ee-6637-4aa1-a73e-a0c89ccc867c',
+  created_at: '2023-05-01T00:00:00.000Z', // query parameters
+  // any other query parameters
 })
 for await (const unifiedApiResource of unifiedApiCursor) {
   console.log(unifiedApiResource)
 }
 
 const unifiedApiResource = await trutoApi.unifiedApi.get('1', {
-  category: 'accounting',
+  unified_model: 'accounting',
   resource: 'accounts',
   integrated_account_id: '766cc1ee-6637-4aa1-a73e-a0c89ccc867c',
 })
