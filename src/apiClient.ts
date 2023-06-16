@@ -1,5 +1,6 @@
-import fetch, { RequestInit } from 'node-fetch'
+import fetch from 'isomorphic-unfetch'
 import * as qs from 'qs'
+import type { RequestInit } from 'node-fetch'
 
 export type ApiClientOptions = {
   baseUrl?: string
