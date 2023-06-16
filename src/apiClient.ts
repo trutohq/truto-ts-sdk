@@ -1,6 +1,5 @@
-import fetch from 'isomorphic-unfetch'
+import { ofetch } from 'ofetch'
 import * as qs from 'qs'
-import type { RequestInit } from 'node-fetch'
 
 export type ApiClientOptions = {
   baseUrl?: string
@@ -16,14 +15,17 @@ export class ApiClient {
     this.token = options.token
   }
 
-  public async request<T>(endpoint: string, init?: RequestInit): Promise<T> {
+  public async request<T>(
+    endpoint: string,
+    init?: Record<string, unknown>
+  ): Promise<T> {
     const headers = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
       Authorization: `Bearer ${this.token}`,
     }
 
-    const response = await fetch(`${this.baseUrl}${endpoint}`, {
+    const response = await ofetch(`${this.baseUrl}${endpoint}`, {
       ...init,
       headers,
     })
