@@ -82,9 +82,12 @@ export class ProxyApi {
   ) {
     const { resource, ...rest } = queryParams
     const query = qs.stringify(rest)
-    return this.apiClient.request<any>(`proxy/${resource}/${method}?${query}`, {
-      method: 'POST',
-      body: JSON.stringify(body),
-    })
+    return this.apiClient.request<any>(
+      `/proxy/${resource}/${method}?${query}`,
+      {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }
+    )
   }
 }
