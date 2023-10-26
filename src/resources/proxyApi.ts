@@ -86,7 +86,7 @@ export class ProxyApi {
       `/proxy/${resource}/${method}?${query}`,
       {
         method: 'POST',
-        body: JSON.stringify(body),
+        body,
       }
     )
   }
