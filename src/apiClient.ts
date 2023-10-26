@@ -20,7 +20,6 @@ export class ApiClient {
     init?: Record<string, unknown>
   ): Promise<T> {
     const headers = {
-      'Content-Type': 'application/json',
       Accept: 'application/json',
       Authorization: `Bearer ${this.token}`,
     }
@@ -62,7 +61,7 @@ export class ApiClient {
     const queryString = qs.stringify(queryParams)
     return this.request<T>(`/${resource}?${queryString}`, {
       method: 'POST',
-      body: JSON.stringify(body),
+      body,
     })
   }
 
@@ -77,7 +76,7 @@ export class ApiClient {
       `/${resource}/${encodeURIComponent(id)}?${queryString}`,
       {
         method: 'PATCH',
-        body: JSON.stringify(body),
+        body,
       }
     )
   }
