@@ -3,6 +3,7 @@ import { PaginationOptions, Cursor } from '../pagination'
 import SharingOptions from '../common/SharingOptions.js'
 import { Team } from './team.js'
 import { EnvironmentUnifiedModel } from './environmentUnifiedModel.js'
+import qs from 'qs'
 
 export type UnifiedModel = {
   id: string
@@ -68,5 +69,24 @@ export class UnifiedModelResource {
   }
   public delete(id: string) {
     return this.apiClient.delete('unified-model', id)
+  }
+
+  public customMethod(
+    method: string,
+    body: Partial<any> = {},
+    queryParams: PaginationOptions & {
+      resource: string
+      integrated_account_id: string
+    }
+  ) {
+    const { resource, ...rest } = queryParams
+    const query = qs.stringify(rest)
+    return this.apiClient.request<any>(
+      `/unified/${resource}/${method}?${query}`,
+      {
+        method: 'POST',
+        body,
+      }
+    )
   }
 }
