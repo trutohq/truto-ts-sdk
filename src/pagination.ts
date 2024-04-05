@@ -1,5 +1,5 @@
 import { ApiClient } from './apiClient'
-import { head } from 'lodash-es'
+import { get, head } from 'lodash-es'
 
 export type PaginationOptions = {
   limit?: number
@@ -20,6 +20,8 @@ export class Cursor<T> {
     this.apiClient = apiClient
     this.resource = resource
     this.options = options || {}
+    const existingNextCursor = get(options, 'next_cursor')
+    this.nextCursor = existingNextCursor || ''
   }
 
   public async first(): Promise<T> {
