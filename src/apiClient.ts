@@ -27,6 +27,10 @@ export class ApiClient {
     const response = await ofetch(`${this.baseUrl}${endpoint}`, {
       ...init,
       headers,
+      retry: 3,
+      retryDelay: 10000,
+      timeout: 30000,
+      retryStatusCodes: [408, 409, 425, 429, 502, 503, 504],
     })
 
     return response as T
