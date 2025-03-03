@@ -1,21 +1,35 @@
 import { ApiClient } from '../apiClient'
 import { PaginationOptions, Cursor } from '../pagination'
 
+export type DaemonStatus = 'stopped' | 'active' | 'stopping' | 'starting'
+
 export type Daemon = {
   id: string
   environment_id: string
-  daemon_id: string
+  label: string
+  status: DaemonStatus
   metadata: Record<string, unknown>
   group_key: string
   created_at: string
   updated_at: string
   last_active_at?: string | null
+  lock?: string | null
 }
 
 export type DaemonCreatePayload = {
-  daemon_id: string
+  label: string
+  status: DaemonStatus
   group_key: string
   metadata?: Record<string, unknown>
+}
+
+export type DaemonUpdatePayload = {
+  label?: string
+  status?: DaemonStatus
+  group_key?: string
+  metadata?: Record<string, unknown>
+  last_active_at?: string | null
+  lock?: string | null
 }
 
 export class DaemonResource {
@@ -36,17 +50,14 @@ export class DaemonResource {
       queryParams
     )
   }
-
+  public update(id: string, body: DaemonUpdatePayload) {
+    return this.apiClient.update<Daemon, DaemonUpdatePayload>(
+      'daemon',
+      id,
+      body
+    )
+  }
   public delete(id: string) {
     return this.apiClient.delete('daemon', id)
-  }
-
-  public ping(daemonId: string) {
-    return this.apiClient.create<{ success: true }, { daemon_id: string }>(
-      'daemon/ping',
-      {
-        daemon_id: daemonId,
-      }
-    )
   }
 }

@@ -13,6 +13,8 @@ import { ProxyApi } from './resources/proxyApi'
 import { DaemonResource } from './resources/daemon'
 import { SyncJobResource } from './resources/syncJob'
 import { SyncJobRunResource } from './resources/syncJobRun'
+import { DaemonJobResource } from './resources/daemonJob'
+import { DaemonJobRunResource } from './resources/daemonJobRun'
 
 export type TrutoApiOptions = {
   baseUrl?: string
@@ -34,6 +36,9 @@ export default class TrutoApi {
   public daemon: DaemonResource
   public syncJob: SyncJobResource
   public syncJobRun: SyncJobRunResource
+  public daemonJob: DaemonJobResource
+  public daemonJobRun: DaemonJobRunResource
+  public apiClient: ApiClient
 
   constructor(options: TrutoApiOptions) {
     const apiClient = new ApiClient(options)
@@ -53,6 +58,9 @@ export default class TrutoApi {
     this.daemon = new DaemonResource(apiClient)
     this.syncJob = new SyncJobResource(apiClient)
     this.syncJobRun = new SyncJobRunResource(apiClient)
+    this.daemonJob = new DaemonJobResource(apiClient)
+    this.daemonJobRun = new DaemonJobRunResource(apiClient)
+    this.apiClient = apiClient
   }
 }
 
