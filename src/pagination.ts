@@ -1,5 +1,5 @@
-import { ApiClient } from './apiClient'
-import { get, head } from 'lodash-es'
+import { ApiClient, ApiClientRequestOptions } from './apiClient'
+import { cloneDeep, get, head } from 'lodash-es'
 
 export type PaginationOptions = {
   limit?: number
@@ -11,21 +11,27 @@ export class Cursor<T> {
   private resource: string
   private options: PaginationOptions
   private nextCursor: string | undefined
-
+  private init?: ApiClientRequestOptions
   constructor(
     apiClient: ApiClient,
     resource: string,
-    options?: PaginationOptions
+    options?: PaginationOptions,
+    init?: ApiClientRequestOptions
   ) {
     this.apiClient = apiClient
     this.resource = resource
     this.options = options || {}
+    this.init = cloneDeep(init)
     const existingNextCursor = get(options, 'next_cursor')
     this.nextCursor = existingNextCursor || ''
   }
 
   public async first(): Promise<T> {
-    const response = await this.apiClient.list<T>(this.resource, this.options)
+    const response = await this.apiClient.list<T>(
+      this.resource,
+      this.options,
+      this.init
+    )
     return head(response.result) as T
   }
 
@@ -41,10 +47,14 @@ export class Cursor<T> {
   }
 
   public async next(): Promise<{ items: T[]; nextCursor: string | undefined }> {
-    const response = await this.apiClient.list<T>(this.resource, {
-      ...this.options,
-      next_cursor: this.nextCursor,
-    })
+    const response = await this.apiClient.list<T>(
+      this.resource,
+      {
+        ...this.options,
+        next_cursor: this.nextCursor,
+      },
+      this.init
+    )
 
     this.nextCursor = response.next_cursor || ''
     return {
