@@ -1,7 +1,8 @@
-import { ApiClient } from '../apiClient'
+import { ApiClient, ApiClientRequestOptions } from '../apiClient'
 import { PaginationOptions, Cursor } from '../pagination'
 import { omit } from 'lodash-es'
 import qs from 'qs'
+import PQueue from 'p-queue'
 
 export class UnifiedApi {
   constructor(private apiClient: ApiClient) {}
@@ -10,12 +11,16 @@ export class UnifiedApi {
       unified_model: string
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions,
+    queue?: PQueue
   ) {
     return new Cursor<any>(
       this.apiClient,
       `unified/${options.unified_model}/${options.resource}`,
-      omit(options, ['unified_model', 'resource'])
+      omit(options, ['unified_model', 'resource']),
+      init,
+      queue
     )
   }
   public get(
@@ -24,12 +29,14 @@ export class UnifiedApi {
       unified_model: string
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions
   ) {
     return this.apiClient.get<any>(
       `unified/${options.unified_model}/${options.resource}`,
       id,
-      omit(options, ['unified_model', 'resource'])
+      omit(options, ['unified_model', 'resource']),
+      init
     )
   }
   public update(
@@ -39,13 +46,15 @@ export class UnifiedApi {
       unified_model: string
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions
   ) {
     return this.apiClient.update<any, any>(
       `unified/${options.unified_model}/${options.resource}`,
       id,
       body,
-      omit(options, ['unified_model', 'resource'])
+      omit(options, ['unified_model', 'resource']),
+      init
     )
   }
   public create(
@@ -54,12 +63,14 @@ export class UnifiedApi {
       unified_model: string
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions
   ) {
     return this.apiClient.create<any, any>(
       `unified/${options.unified_model}/${options.resource}`,
       body,
-      omit(options, ['unified_model', 'resource'])
+      omit(options, ['unified_model', 'resource']),
+      init
     )
   }
   public delete(
@@ -68,12 +79,14 @@ export class UnifiedApi {
       unified_model: string
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions
   ) {
     return this.apiClient.delete(
       `unified/${options.unified_model}/${options.resource}`,
       id,
-      omit(options, ['unified_model', 'resource'])
+      omit(options, ['unified_model', 'resource']),
+      init
     )
   }
 
@@ -83,12 +96,14 @@ export class UnifiedApi {
       unified_model: string
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions
   ) {
     return this.apiClient.get<any>(
       `unified/${options.unified_model}/${options.resource}/meta`,
       method,
-      omit(options, ['unified_model', 'resource'])
+      omit(options, ['unified_model', 'resource']),
+      init
     )
   }
 
@@ -98,7 +113,8 @@ export class UnifiedApi {
     queryParams: PaginationOptions & {
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions
   ) {
     const { resource, ...rest } = queryParams
     const query = qs.stringify(rest)
@@ -107,6 +123,7 @@ export class UnifiedApi {
       {
         method: 'POST',
         body,
+        ...init,
       }
     )
   }

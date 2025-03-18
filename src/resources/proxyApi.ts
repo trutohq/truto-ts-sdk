@@ -1,7 +1,8 @@
-import { ApiClient } from '../apiClient'
+import { ApiClient, ApiClientRequestOptions } from '../apiClient'
 import { PaginationOptions, Cursor } from '../pagination'
 import { omit } from 'lodash-es'
 import qs from 'qs'
+import PQueue from 'p-queue'
 
 export class ProxyApi {
   constructor(private apiClient: ApiClient) {}
@@ -9,12 +10,16 @@ export class ProxyApi {
     queryParams: PaginationOptions & {
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions,
+    queue?: PQueue
   ) {
     return new Cursor<any>(
       this.apiClient,
       `proxy/${queryParams.resource}`,
-      omit(queryParams, ['resource'])
+      omit(queryParams, ['resource']),
+      init,
+      queue
     )
   }
   public get(
@@ -22,12 +27,14 @@ export class ProxyApi {
     queryParams: PaginationOptions & {
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions
   ) {
     return this.apiClient.get<any>(
       `proxy/${queryParams.resource}`,
       id,
-      omit(queryParams, ['resource'])
+      omit(queryParams, ['resource']),
+      init
     )
   }
   public update(
@@ -36,13 +43,15 @@ export class ProxyApi {
     queryParams: PaginationOptions & {
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions
   ) {
     return this.apiClient.update<any, any>(
       `proxy/${queryParams.resource}`,
       id,
       body,
-      omit(queryParams, ['resource'])
+      omit(queryParams, ['resource']),
+      init
     )
   }
   public create(
@@ -50,12 +59,14 @@ export class ProxyApi {
     queryParams: PaginationOptions & {
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions
   ) {
     return this.apiClient.create<any, any>(
       `proxy/${queryParams.resource}`,
       body,
-      omit(queryParams, ['resource'])
+      omit(queryParams, ['resource']),
+      init
     )
   }
   public delete(
@@ -63,12 +74,14 @@ export class ProxyApi {
     queryParams: PaginationOptions & {
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions
   ) {
     return this.apiClient.delete(
       `proxy/${queryParams.resource}`,
       id,
-      omit(queryParams, ['resource'])
+      omit(queryParams, ['resource']),
+      init
     )
   }
 
@@ -78,7 +91,8 @@ export class ProxyApi {
     queryParams: PaginationOptions & {
       resource: string
       integrated_account_id: string
-    }
+    },
+    init?: ApiClientRequestOptions
   ) {
     const { resource, ...rest } = queryParams
     const query = qs.stringify(rest)
@@ -87,6 +101,7 @@ export class ProxyApi {
       {
         method: 'POST',
         body,
+        ...init,
       }
     )
   }
