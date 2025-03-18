@@ -18,14 +18,19 @@ export class EnvironmentResource {
   public list(options?: PaginationOptions) {
     return new Cursor<Environment>(this.apiClient, 'environment', options)
   }
-  public get(id: string) {
-    return this.apiClient.get<Environment>('environment', id)
+  public get(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.get<Environment>('environment', id, queryParams)
   }
-  public update(id: string, body: EnvironmentUpdatePayload) {
+  public update(
+    id: string,
+    body: EnvironmentUpdatePayload,
+    queryParams?: Record<string, unknown>
+  ) {
     return this.apiClient.update<Environment, EnvironmentUpdatePayload>(
       'environment',
       id,
-      body
+      body,
+      queryParams
     )
   }
 }

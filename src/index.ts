@@ -15,6 +15,15 @@ import { SyncJobResource } from './resources/syncJob'
 import { SyncJobRunResource } from './resources/syncJobRun'
 import { DaemonJobResource } from './resources/daemonJob'
 import { DaemonJobRunResource } from './resources/daemonJobRun'
+import { ApiTokenResource } from './resources/apiToken'
+import { BatchRequestResource } from './resources/batchRequest'
+import { CategoryResource } from './resources/category'
+import { DaemonJobCronTriggerResource } from './resources/daemonJobCronTrigger'
+import { DatastoreResource } from './resources/datastore'
+import { DocumentationResource } from './resources/documentation'
+import { LogResource } from './resources/log'
+import { SyncJobCronTriggerResource } from './resources/syncJobCronTrigger'
+import { WebhookResource } from './resources/webhook'
 
 export type TrutoApiOptions = {
   baseUrl?: string
@@ -38,6 +47,15 @@ export default class TrutoApi {
   public syncJobRun: SyncJobRunResource
   public daemonJob: DaemonJobResource
   public daemonJobRun: DaemonJobRunResource
+  public apiToken: ApiTokenResource
+  public batchRequest: BatchRequestResource
+  public category: CategoryResource
+  public daemonJobCronTrigger: DaemonJobCronTriggerResource
+  public datastore: DatastoreResource
+  public documentation: DocumentationResource
+  public log: LogResource
+  public syncJobCronTrigger: SyncJobCronTriggerResource
+  public webhook: WebhookResource
   public apiClient: ApiClient
 
   constructor(options: TrutoApiOptions) {
@@ -60,6 +78,15 @@ export default class TrutoApi {
     this.syncJobRun = new SyncJobRunResource(apiClient)
     this.daemonJob = new DaemonJobResource(apiClient)
     this.daemonJobRun = new DaemonJobRunResource(apiClient)
+    this.apiToken = new ApiTokenResource(apiClient)
+    this.batchRequest = new BatchRequestResource(apiClient)
+    this.category = new CategoryResource(apiClient)
+    this.daemonJobCronTrigger = new DaemonJobCronTriggerResource(apiClient)
+    this.datastore = new DatastoreResource(apiClient)
+    this.documentation = new DocumentationResource(apiClient)
+    this.log = new LogResource(apiClient)
+    this.syncJobCronTrigger = new SyncJobCronTriggerResource(apiClient)
+    this.webhook = new WebhookResource(apiClient)
     this.apiClient = apiClient
   }
 }

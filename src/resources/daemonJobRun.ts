@@ -67,7 +67,7 @@ export class DaemonJobRunResource {
     )
   }
 
-  public delete(id: string) {
-    return this.apiClient.delete('daemon-job-run', id)
+  public delete(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.delete('daemon-job-run', id, queryParams)
   }
 }

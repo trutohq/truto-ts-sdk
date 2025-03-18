@@ -24,19 +24,23 @@ export class EnvironmentUnifiedModelResource {
       options
     )
   }
-  public get(id: string) {
+  public get(id: string, queryParams?: Record<string, unknown>) {
     return this.apiClient.get<EnvironmentUnifiedModel>(
       'environment-unified-model',
-      id
+      id,
+      queryParams
     )
   }
-  public create(body: EnvironmentUnifiedModelCreatePayload) {
+  public create(
+    body: EnvironmentUnifiedModelCreatePayload,
+    queryParams?: Record<string, unknown>
+  ) {
     return this.apiClient.create<
       EnvironmentUnifiedModel,
       EnvironmentUnifiedModelCreatePayload
-    >('environment-unified-model', body)
+    >('environment-unified-model', body, queryParams)
   }
-  public delete(id: string) {
-    return this.apiClient.delete('environment-unified-model', id)
+  public delete(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.delete('environment-unified-model', id, queryParams)
   }
 }

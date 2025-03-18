@@ -20,10 +20,19 @@ export class TeamResource {
   public list(options?: PaginationOptions) {
     return new Cursor<Team>(this.apiClient, 'team', options)
   }
-  public get(id: string) {
-    return this.apiClient.get<Team>('team', id)
+  public get(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.get<Team>('team', id, queryParams)
   }
-  public update(id: string, body: TeamUpdatePayload) {
-    return this.apiClient.update<Team, TeamUpdatePayload>('team', id, body)
+  public update(
+    id: string,
+    body: TeamUpdatePayload,
+    queryParams?: Record<string, unknown>
+  ) {
+    return this.apiClient.update<Team, TeamUpdatePayload>(
+      'team',
+      id,
+      body,
+      queryParams
+    )
   }
 }
