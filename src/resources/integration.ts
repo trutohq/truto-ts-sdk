@@ -39,20 +39,29 @@ export class IntegrationResource {
   public list(options?: PaginationOptions) {
     return new Cursor<Integration>(this.apiClient, 'integration', options)
   }
-  public get(id: string) {
-    return this.apiClient.get<Integration>('integration', id)
+  public get(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.get<Integration>('integration', id, queryParams)
   }
-  public update(id: string, body: IntegrationUpdatePayload) {
+  public update(
+    id: string,
+    body: IntegrationUpdatePayload,
+    queryParams?: Record<string, unknown>
+  ) {
     return this.apiClient.update<Integration, IntegrationUpdatePayload>(
       'integration',
       id,
-      body
+      body,
+      queryParams
     )
   }
-  public create(body: IntegrationCreatePayload) {
+  public create(
+    body: IntegrationCreatePayload,
+    queryParams?: Record<string, unknown>
+  ) {
     return this.apiClient.create<Integration, IntegrationCreatePayload>(
       'integration',
-      body
+      body,
+      queryParams
     )
   }
   public install(id: string, options: { is_enabled?: boolean } = {}) {
@@ -64,7 +73,7 @@ export class IntegrationResource {
       }
     )
   }
-  public delete(id: string) {
-    return this.apiClient.delete('integration', id)
+  public delete(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.delete('integration', id, queryParams)
   }
 }

@@ -29,19 +29,24 @@ export class EnvironmentIntegrationResource {
       options
     )
   }
-  public get(id: string) {
+  public get(id: string, queryParams?: Record<string, unknown>) {
     return this.apiClient.get<EnvironmentIntegration>(
       'environment-integration',
-      id
+      id,
+      queryParams
     )
   }
-  public update(id: string, body: EnvironmentIntegrationUpdatePayload) {
+  public update(
+    id: string,
+    body: EnvironmentIntegrationUpdatePayload,
+    queryParams?: Record<string, unknown>
+  ) {
     return this.apiClient.update<
       EnvironmentIntegration,
       EnvironmentIntegrationUpdatePayload
-    >('environment-integration', id, body)
+    >('environment-integration', id, body, queryParams)
   }
-  public delete(id: string) {
-    return this.apiClient.delete('environment-integration', id)
+  public delete(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.delete('environment-integration', id, queryParams)
   }
 }

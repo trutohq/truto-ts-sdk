@@ -28,20 +28,28 @@ export class IntegratedAccountResource {
       options
     )
   }
-  public get(id: string) {
-    return this.apiClient.get<IntegratedAccount>('integrated-account', id)
+  public get(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.get<IntegratedAccount>(
+      'integrated-account',
+      id,
+      queryParams
+    )
   }
-  public update(id: string, body: IntegratedAccountUpdatePayload) {
+  public update(
+    id: string,
+    body: IntegratedAccountUpdatePayload,
+    queryParams?: Record<string, unknown>
+  ) {
     return this.apiClient.update<
       IntegratedAccount,
       IntegratedAccountUpdatePayload
-    >('integrated-account', id, body)
+    >('integrated-account', id, body, queryParams)
   }
-  public delete(id: string) {
-    return this.apiClient.delete('integrated-account', id)
+  public delete(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.delete('integrated-account', id, queryParams)
   }
 
-  public refreshCredentials(id: string) {
+  public refreshCredentials(id: string, queryParams?: Record<string, unknown>) {
     return this.apiClient.request<{ success: boolean }>(
       `integrated-account/refresh-credentials`,
       {
@@ -49,6 +57,7 @@ export class IntegratedAccountResource {
         body: JSON.stringify({
           id,
         }),
+        queryParams,
       }
     )
   }

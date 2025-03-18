@@ -54,7 +54,7 @@ export class SyncJobResource {
     )
   }
 
-  public delete(id: string) {
-    return this.apiClient.delete('sync-job', id)
+  public delete(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.delete('sync-job', id, queryParams)
   }
 }

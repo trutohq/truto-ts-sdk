@@ -50,14 +50,19 @@ export class DaemonResource {
       queryParams
     )
   }
-  public update(id: string, body: DaemonUpdatePayload) {
+  public update(
+    id: string,
+    body: DaemonUpdatePayload,
+    queryParams?: Record<string, unknown>
+  ) {
     return this.apiClient.update<Daemon, DaemonUpdatePayload>(
       'daemon',
       id,
-      body
+      body,
+      queryParams
     )
   }
-  public delete(id: string) {
-    return this.apiClient.delete('daemon', id)
+  public delete(id: string, queryParams?: Record<string, unknown>) {
+    return this.apiClient.delete('daemon', id, queryParams)
   }
 }
