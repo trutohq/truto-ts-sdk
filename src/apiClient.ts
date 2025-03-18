@@ -2,6 +2,7 @@ import { concat, isArray, isPlainObject, uniq } from 'lodash-es'
 import * as qs from 'qs'
 import pTimeout, { TimeoutError } from 'p-timeout'
 import { TrutoError, TrutoTimeoutError } from './errors'
+import packageJson from '../package.json'
 
 export type ApiClientOptions = {
   baseUrl?: string
@@ -53,6 +54,7 @@ export class ApiClient {
       Accept: 'application/json',
       Authorization: `Bearer ${this.token}`,
       ...(init?.headers as Record<string, string>),
+      'User-Agent': `truto-ts-sdk/${packageJson.version}`,
     }
 
     if (isPlainObject(init?.body) || isArray(init?.body)) {
