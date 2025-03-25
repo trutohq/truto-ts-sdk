@@ -15,6 +15,16 @@ export type IntegratedAccount = {
   environment_integration: Omit<EnvironmentIntegration, 'integration'>
 }
 
+export type IntegratedAccountTool = {
+  resource: string
+  method: string
+  name: string
+  description: string
+  query_schema: Record<string, unknown>
+  body_schema: Record<string, unknown>
+  required: string[]
+}
+
 export type IntegratedAccountUpdatePayload = {
   context?: Record<string, unknown>
 }
@@ -60,5 +70,21 @@ export class IntegratedAccountResource {
         queryParams,
       }
     )
+  }
+
+  public async tools(
+    id: string,
+    methods?: string[],
+    queryParams?: Record<string, unknown>
+  ) {
+    return (
+      await this.apiClient.list<IntegratedAccountTool>(
+        `integrated-account/${id}/tools`,
+        {
+          ...queryParams,
+          methods: methods?.join(','),
+        }
+      )
+    ).result
   }
 }
