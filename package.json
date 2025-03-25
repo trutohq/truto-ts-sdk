@@ -59,7 +59,6 @@
   },
   "dependencies": {
     "lodash-es": "4.17.21",
-    "ofetch": "1.4.1",
     "p-queue": "8.1.0",
     "p-timeout": "6.1.4",
     "qs": "6.11.1"
