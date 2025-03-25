@@ -35,8 +35,6 @@ export class ApiClient {
 
     const contentType = response.headers.get('content-type')
 
-    console.log(contentType)
-
     if (contentType?.includes('json')) {
       return response.json() as unknown as T
     }
