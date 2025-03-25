@@ -6,7 +6,14 @@ export type EntityType =
   | 'unified_model'
   | 'environment_integration'
   | 'environment_unified_model'
-export type DocumentationType = 'readme' | 'note' | 'end_user_guide'
+export type DocumentationType =
+  | 'readme'
+  | 'note'
+  | 'end_user_guide'
+  | 'description'
+  | 'query_schema'
+  | 'body_schema'
+  | 'response_schema'
 
 export type Documentation = {
   id: string

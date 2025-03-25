@@ -92,3 +92,4 @@ export default class TrutoApi {
 }
 
 export { Cursor } from './pagination'
+export { RequestQueue } from './requestQueue'

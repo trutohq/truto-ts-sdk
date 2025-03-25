@@ -6,7 +6,7 @@
 
 ## Requires
 
-NodeJS 16+
+NodeJS 18+ (the library uses `fetch`)
 
 ## Installation
 
@@ -76,6 +76,104 @@ const unifiedApiResource = await trutoApi.unifiedApi.get('1', {
 })
 console.log(unifiedApiResource)
 ```
+
+### Retry Options
+The SDK provides built-in retry mechanisms to handle rate limits and transient failures. You can customize this behavior using the following options:
+
+```javascript
+// Example with retry options
+const result = await trutoApi.unifiedApi.list({
+  unified_model: 'accounting',
+  resource: 'accounts',
+  integrated_account_id: '766cc1ee-6637-4aa1-a73e-a0c89ccc867c',
+}, {
+  // Disable retries for this specific request
+  noRetry: true,
+  
+  // Custom retry status codes (defaults to [408, 409, 425, 429, 502, 503, 504])
+  retryStatusCodes: [429, 503],
+  
+  // Custom retry delay in seconds (defaults to 10)
+  defaultRetryAfter: 5,
+  
+  // Maximum number of retries (defaults to 3)
+  maxRetries: 5,
+  
+  // Request timeout in seconds (defaults to 30)
+  timeout: 60,
+  
+  // Callback function to be notified of retries
+  onRetry: (retryCount, statusCode) => {
+    console.log(`Retry attempt ${retryCount} due to status code ${statusCode}`);
+  }
+});
+```
+
+### Request Queue
+For handling high-volume API requests with rate limiting, the SDK provides a request queue mechanism. This allows you to control the rate of requests and handle concurrent operations efficiently:
+
+```javascript
+import TrutoApi, { RequestQueue } from '@truto/truto-ts-sdk'
+
+const truto = new TrutoApi({
+  token: process.env.TRUTO_API_TOKEN,
+  baseUrl: process.env.TRUTO_API_BASE_URL,
+})
+
+// Create a request queue with custom concurrency and interval
+const queue = new RequestQueue(truto, {
+  concurrency: 5,  // Number of concurrent requests
+  interval: 1000,   // Time interval in milliseconds between requests
+})
+
+// Use the queue to make API calls
+const response = await queue.proxyApi
+  .list({
+    integrated_account_id: '820b732c-bd4d-4b98-b33e-fda752a368ff',
+    resource: 'tickets',
+    limit: 10,
+  })
+  .toArray()
+
+console.log(response)
+```
+
+The request queue helps manage API rate limits by:
+- Controlling the number of concurrent requests
+- Spacing out requests over time
+- Automatically handling rate limit responses
+- Providing a clean interface for making queued API calls
+
+### File Uploads
+The SDK supports file uploads using FormData. You can also use the `truto_body_passthrough` option to send the FormData directly to the underlying integration's API:
+
+```javascript
+// Example of uploading a file with FormData
+const formData = new FormData();
+formData.append('file', fileObject); // fileObject is a File or Blob
+formData.append('name', 'example.pdf');
+formData.append('description', 'Document upload');
+
+// Upload with standard FormData handling
+await trutoApi.unifiedApi.create(formData, {
+  unified_model: 'file-storage',
+  resource: 'drive-items',
+  integrated_account_id: '766cc1ee-6637-4aa1-a73e-a0c89ccc867c',
+});
+
+// Upload with body passthrough (sends FormData directly to integration)
+await trutoApi.unifiedApi.create('documents', formData, {
+  unified_model: 'file-storage',
+  resource: 'drive-items',
+  integrated_account_id: '766cc1ee-6637-4aa1-a73e-a0c89ccc867c',
+  truto_body_passthrough: true, // FormData will be sent as-is to the integration
+});
+```
+
+The `truto_body_passthrough` option is useful when you need to:
+- Maintain specific FormData field names required by the integration
+- Upload files to integrations that expect raw FormData
+- Preserve the exact structure of your FormData request
 
 ## Contributing
 We welcome contributions to improve `truto-ts-sdk`. Please submit issues or pull requests on the GitHub repository.

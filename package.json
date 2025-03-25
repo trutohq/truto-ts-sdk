@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.22",
+  "version": "2.0.0",
   "description": "Truto REST API SDK for TypeScript. Works in NodeJS & Cloudflare Workers.",
   "repository": "https://github.com/trutohq/truto-ts-sdk.git",
   "source": "src/index.ts",
@@ -37,15 +37,15 @@
   "type": "module",
   "license": "MIT",
   "volta": {
-    "node": "18.13.0",
-    "yarn": "1.22.19"
+    "node": "18.20.7",
+    "yarn": "1.22.22"
   },
   "devDependencies": {
     "@parcel/packager-ts": "2.8.3",
     "@parcel/transformer-typescript-types": "2.8.3",
     "@types/jest": "29.4.0",
     "@types/lodash-es": "4.17.7",
-    "@types/node": "18.14.6",
+    "@types/node": "18.19.80",
     "@types/qs": "6.9.7",
     "@typescript-eslint/eslint-plugin": "5.46.1",
     "@typescript-eslint/parser": "5.46.1",
@@ -59,7 +59,8 @@
   },
   "dependencies": {
     "lodash-es": "4.17.21",
-    "ofetch": "1.4.1",
+    "p-queue": "8.1.0",
+    "p-timeout": "6.1.4",
     "qs": "6.11.1"
   },
   "scripts": {

@@ -1,5 +1,6 @@
-import { ApiClient } from './apiClient'
-import { get, head } from 'lodash-es'
+import { ApiClient, ApiClientRequestOptions } from './apiClient'
+import { cloneDeep, get, head } from 'lodash-es'
+import PQueue from 'p-queue'
 
 export type PaginationOptions = {
   limit?: number
@@ -11,22 +12,41 @@ export class Cursor<T> {
   private resource: string
   private options: PaginationOptions
   private nextCursor: string | undefined
+  private init?: ApiClientRequestOptions
+  private queue?: PQueue
 
   constructor(
     apiClient: ApiClient,
     resource: string,
-    options?: PaginationOptions
+    options?: PaginationOptions,
+    init?: ApiClientRequestOptions,
+    queue?: PQueue
   ) {
     this.apiClient = apiClient
     this.resource = resource
     this.options = options || {}
+    this.init = cloneDeep(init)
+    this.queue = queue
     const existingNextCursor = get(options, 'next_cursor')
     this.nextCursor = existingNextCursor || ''
   }
 
+  private async queueOrExecute<T>(fn: () => Promise<T>): Promise<T> {
+    if (this.queue) {
+      return this.queue.add(fn) as Promise<T>
+    }
+    return fn()
+  }
+
   public async first(): Promise<T> {
-    const response = await this.apiClient.list<T>(this.resource, this.options)
-    return head(response.result) as T
+    return this.queueOrExecute(async () => {
+      const response = await this.apiClient.list<T>(
+        this.resource,
+        this.options,
+        this.init
+      )
+      return head(response.result) as T
+    })
   }
 
   public async toArray(): Promise<T[]> {
@@ -41,16 +61,22 @@ export class Cursor<T> {
   }
 
   public async next(): Promise<{ items: T[]; nextCursor: string | undefined }> {
-    const response = await this.apiClient.list<T>(this.resource, {
-      ...this.options,
-      next_cursor: this.nextCursor,
-    })
+    return this.queueOrExecute(async () => {
+      const response = await this.apiClient.list<T>(
+        this.resource,
+        {
+          ...this.options,
+          next_cursor: this.nextCursor,
+        },
+        this.init
+      )
 
-    this.nextCursor = response.next_cursor || ''
-    return {
-      items: response.result,
-      nextCursor: this.nextCursor,
-    }
+      this.nextCursor = response.next_cursor || ''
+      return {
+        items: response.result,
+        nextCursor: this.nextCursor,
+      }
+    })
   }
 
   async *[Symbol.asyncIterator](): AsyncIterator<T> {

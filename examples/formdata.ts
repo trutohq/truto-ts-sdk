@@ -7,11 +7,19 @@ const truto = new TrutoApi({
 
 const formData = new FormData()
 
-formData.append('test', 'test')
-
 formData.append('file', new Blob(['test'], { type: 'text/plain' }), 'test.txt')
 
-await truto.proxyApi.create(formData, {
-  resource: 'multipart',
-  integrated_account_id: 'abefac22-863d-4444-be2c-239a2d505cf7',
+const response = await truto.proxyApi.create(formData, {
+  resource: 'files',
+  integrated_account_id: '820b732c-bd4d-4b98-b33e-fda752a368ff',
+  truto_body_passthrough: true,
 })
+
+console.log(response)
+
+const file = await truto.proxyApi.get(response.fileId, {
+  resource: 'files',
+  integrated_account_id: '820b732c-bd4d-4b98-b33e-fda752a368ff',
+})
+
+console.log(await file.text())
