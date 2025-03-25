@@ -15,6 +15,8 @@ export type ApiClientRequestOptions = {
   maxRetries?: number
   timeout?: number
   headers?: Record<string, string>
+  onRetry?: (retryCount: number, statusCode?: number) => void
+  noRetry?: boolean
 }
 
 export class ApiClient {
@@ -32,6 +34,8 @@ export class ApiClient {
     }
 
     const contentType = response.headers.get('content-type')
+
+    console.log(contentType)
 
     if (contentType?.includes('json')) {
       return response.json() as unknown as T
@@ -77,7 +81,7 @@ export class ApiClient {
           }
         )
         if (!response.ok) {
-          if (retryStatusCodes.includes(response.status)) {
+          if (!init?.noRetry && retryStatusCodes.includes(response.status)) {
             if (response.status === 429) {
               const retryAfterHeader = response.headers.get('retry-after')
               const retryAfter = retryAfterHeader
@@ -88,10 +92,12 @@ export class ApiClient {
                   setTimeout(resolve, retryAfter * 1000)
                 )
                 retryCount++
+                init?.onRetry?.(retryCount, response.status)
                 continue
               }
             } else {
               retryCount++
+              init?.onRetry?.(retryCount, response.status)
               continue
             }
           }

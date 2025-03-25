@@ -9,3 +9,13 @@ const queue = new RequestQueue(truto, {
   concurrency: 10,
   interval: 1000,
 })
+
+const response = await queue.proxyApi
+  .list({
+    integrated_account_id: '820b732c-bd4d-4b98-b33e-fda752a368ff',
+    resource: 'tickets',
+    limit: 10,
+  })
+  .toArray()
+
+console.log(response)
