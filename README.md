@@ -105,6 +105,9 @@ You can use these tools with your preferred LLM provider to:
 - Build AI-powered automation workflows
 - Implement dynamic integration capabilities
 
+Truto already provides a toolset for the following LLM libraries
+- Langchain.js - https://github.com/trutohq/truto-langchainjs-toolset
+
 ### Retry Options
 The SDK provides built-in retry mechanisms to handle rate limits and transient failures. You can customize this behavior using the following options:
 
