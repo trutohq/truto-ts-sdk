@@ -77,6 +77,34 @@ const unifiedApiResource = await trutoApi.unifiedApi.get('1', {
 console.log(unifiedApiResource)
 ```
 
+### Available Tools
+The SDK provides a way to discover available tools and their schemas for each integrated account. This is particularly useful when building LLM-powered applications that need to interact with the integrations:
+
+```javascript
+// Get available tools for an integrated account
+const tools = await trutoApi.integratedAccount.tools('766cc1ee-6637-4aa1-a73e-a0c89ccc867c', ['list', 'get'])
+console.log(tools) // Array of tools with their schemas and requirements
+
+// Get all tools without filtering by method
+const allTools = await trutoApi.integratedAccount.tools('766cc1ee-6637-4aa1-a73e-a0c89ccc867c')
+console.log(allTools)
+```
+
+Each tool in the response includes:
+- `resource`: The resource name (e.g., 'tickets', 'accounts')
+- `method`: The available method (e.g., 'list', 'get', 'create')
+- `name`: A human-readable name for the tool
+- `description`: A description of what the tool does
+- `query_schema`: JSON schema for query parameters
+- `body_schema`: JSON schema for request body (if applicable)
+- `required`: Array of required parameter names
+
+You can use these tools with your preferred LLM provider to:
+- Generate function calls with proper parameter validation
+- Create natural language interfaces to your integrations
+- Build AI-powered automation workflows
+- Implement dynamic integration capabilities
+
 ### Retry Options
 The SDK provides built-in retry mechanisms to handle rate limits and transient failures. You can customize this behavior using the following options:
 
