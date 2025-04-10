@@ -61,6 +61,10 @@ export class ApiClient {
 
     if (isPlainObject(init?.body) || isArray(init?.body)) {
       headers['Content-Type'] = 'application/json'
+      init = {
+        ...init,
+        body: init?.body ? JSON.stringify(init?.body) : undefined,
+      }
     }
 
     let retryCount = 0
@@ -152,11 +156,9 @@ export class ApiClient {
     init?: ApiClientRequestOptions
   ): Promise<T> {
     const queryString = qs.stringify(queryParams)
-    const stringifiedBody =
-      isPlainObject(body) || isArray(body) ? JSON.stringify(body) : body
     return this.request<T>(`/${resource}?${queryString}`, {
       method: 'POST',
-      body: stringifiedBody,
+      body,
       ...init,
     })
   }
@@ -169,13 +171,11 @@ export class ApiClient {
     init?: ApiClientRequestOptions
   ): Promise<T> {
     const queryString = qs.stringify(queryParams)
-    const stringifiedBody =
-      isPlainObject(body) || isArray(body) ? JSON.stringify(body) : body
     return this.request<T>(
       `/${resource}/${encodeURIComponent(id)}?${queryString}`,
       {
         method: 'PATCH',
-        body: stringifiedBody,
+        body,
         ...init,
       }
     )
