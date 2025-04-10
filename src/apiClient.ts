@@ -1,8 +1,8 @@
 import { concat, isArray, isPlainObject, uniq } from 'lodash-es'
-import * as qs from 'qs'
 import pTimeout, { TimeoutError } from 'p-timeout'
-import { TrutoError, TrutoTimeoutError } from './errors'
+import qs from 'qs'
 import packageJson from '../package.json'
+import { TrutoError, TrutoTimeoutError } from './errors'
 
 export type ApiClientOptions = {
   baseUrl?: string
@@ -152,9 +152,11 @@ export class ApiClient {
     init?: ApiClientRequestOptions
   ): Promise<T> {
     const queryString = qs.stringify(queryParams)
+    const stringifiedBody =
+      isPlainObject(body) || isArray(body) ? JSON.stringify(body) : body
     return this.request<T>(`/${resource}?${queryString}`, {
       method: 'POST',
-      body,
+      body: stringifiedBody,
       ...init,
     })
   }
@@ -167,11 +169,13 @@ export class ApiClient {
     init?: ApiClientRequestOptions
   ): Promise<T> {
     const queryString = qs.stringify(queryParams)
+    const stringifiedBody =
+      isPlainObject(body) || isArray(body) ? JSON.stringify(body) : body
     return this.request<T>(
       `/${resource}/${encodeURIComponent(id)}?${queryString}`,
       {
         method: 'PATCH',
-        body,
+        body: stringifiedBody,
         ...init,
       }
     )
