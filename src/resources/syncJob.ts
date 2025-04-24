@@ -4,23 +4,38 @@ import { PaginationOptions, Cursor } from '../pagination'
 export type SyncJob = {
   id: string
   integration_name: string
+  label?: string
   args_schema?: Record<string, unknown>
-  resources?: Record<string, unknown>
+  args_validation?: string
+  resources?: unknown[]
+  default_runtime_version?: string
   environment_id: string
+  mutex_key?: string
+  state_key?: string
   created_at: string
   updated_at: string
 }
 
 export type SyncJobCreatePayload = {
   integration_name: string
+  label?: string
   args_schema?: Record<string, unknown>
-  resources?: Record<string, unknown>
+  args_validation?: string
+  resources?: unknown[]
+  mutex_key?: string
+  state_key?: string
+  default_runtime_version?: string
 }
 
 export type SyncJobUpdatePayload = {
   integration_name?: string
+  label?: string
   args_schema?: Record<string, unknown>
-  resources?: Record<string, unknown>
+  args_validation?: string
+  resources?: unknown[]
+  mutex_key?: string
+  state_key?: string
+  default_runtime_version?: string
 }
 
 export class SyncJobResource {
