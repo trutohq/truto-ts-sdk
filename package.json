@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Truto REST API SDK for TypeScript. Works in NodeJS & Cloudflare Workers.",
   "repository": "https://github.com/trutohq/truto-ts-sdk.git",
   "source": "src/index.ts",
