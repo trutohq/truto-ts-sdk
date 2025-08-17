@@ -75,6 +75,7 @@ export class IntegratedAccountResource {
   public async tools(
     id: string,
     methods?: string[],
+    tags?: string[],
     queryParams?: Record<string, unknown>
   ) {
     return (
@@ -83,6 +84,7 @@ export class IntegratedAccountResource {
         {
           ...queryParams,
           methods: methods?.join(','),
+          tags: tags?.join(','),
         }
       )
     ).result
