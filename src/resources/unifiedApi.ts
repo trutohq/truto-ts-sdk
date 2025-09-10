@@ -1,8 +1,8 @@
-import { ApiClient, ApiClientRequestOptions } from '../apiClient'
-import { PaginationOptions, Cursor } from '../pagination'
 import { omit } from 'lodash-es'
-import qs from 'qs'
 import PQueue from 'p-queue'
+import qs from 'qs'
+import { ApiClient, ApiClientRequestOptions } from '../apiClient'
+import { Cursor, PaginationOptions } from '../pagination'
 
 export class UnifiedApi {
   constructor(private apiClient: ApiClient) {}
@@ -111,15 +111,16 @@ export class UnifiedApi {
     method: string,
     body: Partial<any> = {},
     queryParams: PaginationOptions & {
+      unified_model: string
       resource: string
       integrated_account_id: string
     },
     init?: ApiClientRequestOptions
   ) {
-    const { resource, ...rest } = queryParams
+    const { resource, unified_model, ...rest } = queryParams
     const query = qs.stringify(rest)
     return this.apiClient.request<any>(
-      `/unified/${resource}/${method}?${query}`,
+      `/unified/${unified_model}/${resource}/${method}?${query}`,
       {
         method: 'POST',
         body,
