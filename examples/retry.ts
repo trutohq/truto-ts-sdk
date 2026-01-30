@@ -14,8 +14,15 @@ await Promise.all(
         resource: 'tickets',
       },
       {
-        onRetry: (error, attempt) => {
-          console.log(`Retrying ${i}`, error, attempt)
+        onRetry: (retryCount, statusCode) => {
+          console.log(`Retrying ${i}`, retryCount, statusCode)
+        },
+        onRateLimited: (retryAfter, retryCount) => {
+          console.log(
+            `Rate limited ${i}, waiting ${retryAfter}s before retry ${
+              retryCount + 1
+            }`
+          )
         },
       }
     )

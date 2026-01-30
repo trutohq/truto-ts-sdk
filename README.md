@@ -136,6 +136,11 @@ const result = await trutoApi.unifiedApi.list({
   // Callback function to be notified of retries
   onRetry: (retryCount, statusCode) => {
     console.log(`Retry attempt ${retryCount} due to status code ${statusCode}`);
+  },
+  
+  // Callback function to be notified when rate limited (429 status code)
+  onRateLimited: (retryAfter, retryCount) => {
+    console.log(`Rate limited, waiting ${retryAfter} seconds before retry ${retryCount + 1}`);
   }
 });
 ```

@@ -16,6 +16,7 @@ export type ApiClientRequestOptions = {
   timeout?: number
   headers?: Record<string, string>
   onRetry?: (retryCount: number, statusCode?: number) => void
+  onRateLimited?: (retryAfter: number, retryCount: number) => void
   noRetry?: boolean
 }
 
@@ -90,6 +91,7 @@ export class ApiClient {
                 ? parseInt(retryAfterHeader)
                 : defaultRetryAfter
               if (retryAfter) {
+                init?.onRateLimited?.(retryAfter, retryCount)
                 await new Promise(resolve =>
                   setTimeout(resolve, retryAfter * 1000)
                 )
