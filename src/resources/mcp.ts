@@ -1,106 +1,71 @@
-import { ApiClient, ApiClientRequestOptions } from '../apiClient'
+import { ApiClient } from '../apiClient'
+import qs from 'qs'
+
+
+export type McpInitCallPayload = {
+    method: 'initialize'
+    params: {
+        protocolVersion?: string
+        clientInfo: {
+            name: string
+            version: string
+        }
+    }
+}
+
+export type McpListToolsPayload = {
+    method: 'tools/list'
+    id?: number
+}
+
+export type McpCallToolPayload = {
+    method: 'tools/call'
+    id?: number
+    params: {
+        name: string
+        arguments: Record<string, unknown>
+    }
+}
+
+export type McpPayload = McpInitCallPayload | McpListToolsPayload | McpCallToolPayload
+
+export type McpQueryParams = {
+    integrated_account_id?: string
+    [key: string]: unknown
+}
 
 export class Mcp {
     constructor(private apiClient: ApiClient) { }
 
-    /**
-     * Make an MCP (Model Context Protocol) request.
-     *
-     * @param token The MCP token
-     * @param message The MCP JSON-RPC message
-     * @param init Optional request options
-     */
-    public async call<T = any>(
-        token: string,
-        message: {
-            jsonrpc: '2.0'
-            method: string
-            params?: any
-            id: string | number
-        },
-        init?: ApiClientRequestOptions
-    ): Promise<T> {
-        return this.apiClient.request<T>(`/mcp/${token}`, {
-            method: 'POST',
-            body: message,
-            ...init,
-        })
-    }
-
-    /**
-     * Helper method to list available tools for an MCP server.
-     *
-     * @param token The MCP token
-     * @param id JSON-RPC request ID
-     * @param init Optional request options
-     */
-    public listTools(
-        token: string,
-        id: string | number = 1,
-        init?: ApiClientRequestOptions
-    ) {
-        return this.call(
-            token,
-            { jsonrpc: '2.0', method: 'tools/list', id },
-            init
-        )
-    }
-
-    /**
-     * Helper method to call a tool on an MCP server.
-     *
-     * @param token The MCP token
-     * @param name Tool name
-     * @param args Tool arguments
-     * @param id JSON-RPC request ID
-     * @param init Optional request options
-     */
-    public callTool(
-        token: string,
-        name: string,
-        args: any = {},
-        id: string | number = 1,
-        init?: ApiClientRequestOptions
-    ) {
-        return this.call(
-            token,
+    public async call(token: string, payload: McpPayload, queryParams?: McpQueryParams) {
+        const queryString = qs.stringify(queryParams)
+        return this.apiClient.request(
+            `mcp/${token}${queryString ? `?${queryString}` : ''}`,
             {
-                jsonrpc: '2.0',
-                method: 'tools/call',
-                params: { name, arguments: args },
-                id,
-            },
-            init
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }
         )
     }
 
-    /**
-     * Helper method to initialize an MCP connection.
-     *
-     * @param token The MCP token
-     * @param clientInfo Optional client information
-     * @param id JSON-RPC request ID
-     * @param init Optional request options
-     */
-    public initialize(
-        token: string,
-        clientInfo?: { name: string; version: string },
-        id: string | number = 1,
-        init?: ApiClientRequestOptions
-    ) {
-        return this.call(
-            token,
-            {
-                jsonrpc: '2.0',
-                method: 'initialize',
-                params: {
-                    protocolVersion: '2024-11-05',
-                    clientInfo,
-                    capabilities: {},
-                },
-                id,
-            },
-            init
-        )
+    public async initialize(token: string, clientName: string, clientVersion: string, queryParams?: McpQueryParams) {
+        return this.call(token, {
+            method: 'initialize',
+            params: {
+                protocolVersion: '2024-11-05',
+                clientInfo: {
+                    name: clientName,
+                    version: clientVersion
+                }
+            }
+        }, queryParams)
+    }
+
+    public async listTools(token: string, queryParams?: McpQueryParams) {
+        return this.call(token, { method: 'tools/list', id: 1 }, queryParams)
+    }
+
+    public async callTool(token: string, name: string, args: Record<string, unknown>, queryParams?: McpQueryParams) {
+        return this.call(token, { method: 'tools/call', id: 2, params: { name, arguments: args } }, queryParams)
     }
 }

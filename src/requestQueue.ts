@@ -101,12 +101,13 @@ export class RequestQueue {
     customMethod: (
       method: string,
       body: Partial<any> = {},
-      queryParams: ProxyApiQueryParams,
+      queryParams: UnifiedApiQueryParams,
       init?: ApiClientRequestOptions
     ) =>
       this.queue.add(() =>
         this.truto.unifiedApi.customMethod(method, body, queryParams, init)
       ),
+
   }
 
   public request = (...args: Parameters<ApiClient['request']>) =>

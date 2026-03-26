@@ -27,6 +27,12 @@ import { LogResource } from './resources/log'
 import { SyncJobCronTriggerResource } from './resources/syncJobCronTrigger'
 import { WebhookResource } from './resources/webhook'
 import { WorkflowResource } from './resources/workflow'
+import { AlarmResource } from './resources/alarm'
+import { SandboxIntegratedAccountResource } from './resources/sandboxIntegratedAccount'
+import { IntegratedAccountWebhookResource } from './resources/integratedAccountWebhook'
+import { EnvironmentIntegrationWebhookResource } from './resources/environmentIntegrationWebhook'
+import { WorkflowRunResource } from './resources/workflowRun'
+import { StaticGateResource } from './resources/staticGate'
 
 export type TrutoApiOptions = {
   baseUrl?: string
@@ -62,6 +68,12 @@ export default class TrutoApi {
   public syncJobCronTrigger: SyncJobCronTriggerResource
   public webhook: WebhookResource
   public workflow: WorkflowResource
+  public alarm: AlarmResource
+  public sandboxIntegratedAccount: SandboxIntegratedAccountResource
+  public integratedAccountWebhook: IntegratedAccountWebhookResource
+  public environmentIntegrationWebhook: EnvironmentIntegrationWebhookResource
+  public workflowRun: WorkflowRunResource
+  public staticGate: StaticGateResource
   public apiClient: ApiClient
 
   constructor(options: TrutoApiOptions) {
@@ -96,6 +108,12 @@ export default class TrutoApi {
     this.syncJobCronTrigger = new SyncJobCronTriggerResource(apiClient)
     this.webhook = new WebhookResource(apiClient)
     this.workflow = new WorkflowResource(apiClient)
+    this.alarm = new AlarmResource(apiClient)
+    this.sandboxIntegratedAccount = new SandboxIntegratedAccountResource(apiClient)
+    this.integratedAccountWebhook = new IntegratedAccountWebhookResource(apiClient)
+    this.environmentIntegrationWebhook = new EnvironmentIntegrationWebhookResource(apiClient)
+    this.workflowRun = new WorkflowRunResource(apiClient)
+    this.staticGate = new StaticGateResource(apiClient)
     this.apiClient = apiClient
   }
 }

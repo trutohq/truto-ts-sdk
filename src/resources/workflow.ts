@@ -3,29 +3,56 @@ import { PaginationOptions, Cursor } from '../pagination'
 
 export type Workflow = {
     id: string
-    name: string
+    environment_id: string
+    trigger_name: string
+    config: Record<string, unknown>
     created_at: string
     updated_at: string
-    [key: string]: any
+}
+
+export type WorkflowCreatePayload = {
+    trigger_name: string
+    config: Record<string, unknown>
+}
+
+export type WorkflowUpdatePayload = {
+    trigger_name?: string
+    config?: Record<string, unknown>
+}
+
+export type WorkflowQueryParams = {
+    environment_id?: string
+    trigger_name?: string
 }
 
 export class WorkflowResource {
     constructor(private apiClient: ApiClient) { }
 
-    public list(options?: PaginationOptions) {
+    public list(options?: PaginationOptions & WorkflowQueryParams) {
         return new Cursor<Workflow>(this.apiClient, 'workflow', options)
     }
 
-    public get(id: string, queryParams?: Record<string, unknown>) {
+    public get(id: string, queryParams?: WorkflowQueryParams) {
         return this.apiClient.get<Workflow>('workflow', id, queryParams)
     }
 
-    public create(body: any, queryParams?: Record<string, unknown>) {
-        return this.apiClient.create<Workflow, any>('workflow', body, queryParams)
+    public create(
+        body: WorkflowCreatePayload,
+        queryParams?: WorkflowQueryParams
+    ) {
+        return this.apiClient.create<Workflow, WorkflowCreatePayload>(
+            'workflow',
+            body,
+            queryParams
+        )
     }
 
-    public update(id: string, body: any, queryParams?: Record<string, unknown>) {
-        return this.apiClient.update<Workflow, any>(
+    public update(
+        id: string,
+        body: WorkflowUpdatePayload,
+        queryParams?: WorkflowQueryParams
+    ) {
+        return this.apiClient.update<Workflow, WorkflowUpdatePayload>(
             'workflow',
             id,
             body,
@@ -33,7 +60,7 @@ export class WorkflowResource {
         )
     }
 
-    public delete(id: string, queryParams?: Record<string, unknown>) {
+    public delete(id: string, queryParams?: WorkflowQueryParams) {
         return this.apiClient.delete('workflow', id, queryParams)
     }
 }
