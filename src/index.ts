@@ -10,6 +10,8 @@ import { UserResource } from './resources/user'
 import { UnifiedModelResource } from './resources/unifiedModel'
 import { UnifiedApi } from './resources/unifiedApi'
 import { ProxyApi } from './resources/proxyApi'
+import { CustomApi } from './resources/customApi'
+import { Mcp } from './resources/mcp'
 import { DaemonResource } from './resources/daemon'
 import { SyncJobResource } from './resources/syncJob'
 import { SyncJobRunResource } from './resources/syncJobRun'
@@ -24,6 +26,7 @@ import { DocumentationResource } from './resources/documentation'
 import { LogResource } from './resources/log'
 import { SyncJobCronTriggerResource } from './resources/syncJobCronTrigger'
 import { WebhookResource } from './resources/webhook'
+import { WorkflowResource } from './resources/workflow'
 
 export type TrutoApiOptions = {
   baseUrl?: string
@@ -42,6 +45,8 @@ export default class TrutoApi {
   public unifiedModel: UnifiedModelResource
   public unifiedApi: UnifiedApi
   public proxyApi: ProxyApi
+  public customApi: CustomApi
+  public mcp: Mcp
   public daemon: DaemonResource
   public syncJob: SyncJobResource
   public syncJobRun: SyncJobRunResource
@@ -56,6 +61,7 @@ export default class TrutoApi {
   public log: LogResource
   public syncJobCronTrigger: SyncJobCronTriggerResource
   public webhook: WebhookResource
+  public workflow: WorkflowResource
   public apiClient: ApiClient
 
   constructor(options: TrutoApiOptions) {
@@ -73,6 +79,8 @@ export default class TrutoApi {
     this.unifiedModel = new UnifiedModelResource(apiClient)
     this.unifiedApi = new UnifiedApi(apiClient)
     this.proxyApi = new ProxyApi(apiClient)
+    this.customApi = new CustomApi(apiClient)
+    this.mcp = new Mcp(apiClient)
     this.daemon = new DaemonResource(apiClient)
     this.syncJob = new SyncJobResource(apiClient)
     this.syncJobRun = new SyncJobRunResource(apiClient)
@@ -87,6 +95,7 @@ export default class TrutoApi {
     this.log = new LogResource(apiClient)
     this.syncJobCronTrigger = new SyncJobCronTriggerResource(apiClient)
     this.webhook = new WebhookResource(apiClient)
+    this.workflow = new WorkflowResource(apiClient)
     this.apiClient = apiClient
   }
 }
