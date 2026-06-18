@@ -211,6 +211,10 @@ The `truto_body_passthrough` option is useful when you need to:
 - Upload files to integrations that expect raw FormData
 - Preserve the exact structure of your FormData request
 
+## Additional Endpoints
+
+The SDK also includes endpoints for Custom API, MCP, Workflows, Workflow Runs, Alarms, Static Gates, Sandbox Integrated Accounts, and Webhooks. See the full reference in [ADVANCED_USAGE.md](./ADVANCED_USAGE.md).
+
 ## Contributing
 We welcome contributions to improve `truto-ts-sdk`. Please submit issues or pull requests on the GitHub repository.
 
