@@ -74,7 +74,8 @@
     "word-wrap": "npm:@aashutoshrathi/word-wrap@1.2.5",
     "semver": "npm:semver@7.5.4",
     "postcss": "npm:postcss@8.5.23",
+    "**/postcss/nanoid": "3.3.18",
     "brace-expansion": "npm:brace-expansion@1.1.18",
-    "js-yaml": "npm:js-yaml@4.3.0"
+    "js-yaml": "npm:js-yaml@4.3.1"
   }
 }
