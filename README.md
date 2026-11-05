@@ -81,14 +81,16 @@ console.log(unifiedApiResource)
 The SDK provides a way to discover available tools and their schemas for each integrated account. This is particularly useful when building LLM-powered applications that need to interact with the integrations:
 
 ```javascript
-// Get available tools for an integrated account
-const tools = await trutoApi.integratedAccount.tools('766cc1ee-6637-4aa1-a73e-a0c89ccc867c', ['list', 'get'])
+// Get the read tools (list and get) for an integrated account
+const tools = await trutoApi.integratedAccount.tools('766cc1ee-6637-4aa1-a73e-a0c89ccc867c', ['read'])
 console.log(tools) // Array of tools with their schemas and requirements
 
 // Get all tools without filtering by method
 const allTools = await trutoApi.integratedAccount.tools('766cc1ee-6637-4aa1-a73e-a0c89ccc867c')
 console.log(allTools)
 ```
+
+`methods` accepts a method name (`list`, `get`, `create`, `update`, `delete`, or a custom method name) or a group: `read` (list and get), `write` (create, update and delete), or `custom` (everything else). Pass one entry for now: the SDK sends multiple entries as a single comma-separated value (`list,get`), which the API currently treats as one method name and matches nothing. To get list and get tools together, use `['read']`. `tags` works the same way.
 
 Each tool in the response includes:
 - `resource`: The resource name (e.g., 'tickets', 'accounts')
@@ -107,6 +109,46 @@ You can use these tools with your preferred LLM provider to:
 
 Truto already provides a toolset for the following LLM libraries
 - Langchain.js - https://github.com/trutohq/truto-langchainjs-toolset
+
+### Logs
+`trutoApi.log.list()` reads logs for one `log_type` at a time: `unified_proxy_api`, `rapid_bridge` (sync job runs), `webhook` (outbound webhook deliveries), `mcp`, or `sync_job_cron_trigger`. `log_type_filter` takes keys specific to that log type, and TypeScript checks them for you:
+
+```javascript
+const logs = await trutoApi.log
+  .list({
+    log_type: 'mcp',
+    created_at: { gt: '2026-10-01T00:00:00Z', lt: '2026-10-31T00:00:00Z' },
+    log_type_filter: { mcp_server_id: 'f3c1...', tool_name: 'list_all_tickets' },
+  })
+  .toArray()
+```
+
+| `log_type` | `log_type_filter` keys |
+| --- | --- |
+| `unified_proxy_api` | `request_type` (`proxy` or `unified`), `integrated_account_id`, `environment_id`, `integration` |
+| `rapid_bridge` | `integrated_account_id`, `sync_job_run_id`, `sync_job_id`, `sync_job_run_event`, `webhook_id`, `environment_id`, `integration` |
+| `webhook` | `webhook_id`, `event`, `integrated_account_id`, `environment_id`, `integration` |
+| `mcp` | `integrated_account_id`, `mcp_server_id`, `mcp_method`, `tool_name`, `resource`, `method`, `client_name`, `client_version`, `request_id`, `environment_id`, `integration` |
+| `sync_job_cron_trigger` | `environment_id` |
+
+Each filter value can be a string or an array of strings to match any of them. `created_at.gt` and `created_at.lt` can be at most one month apart, and `lt` is required when you set `gt`.
+
+### Errors
+A failed request throws a `TrutoError` with `statusCode`, `statusText`, `response`, and `data` (the parsed response body, when there is one). A request that runs past its timeout throws a `TrutoTimeoutError`, which extends `TrutoError`. Both are exported from the package:
+
+```javascript
+import TrutoApi, { TrutoError, TrutoTimeoutError } from '@truto/truto-ts-sdk'
+
+try {
+  await trutoApi.integratedAccount.get('766cc1ee-6637-4aa1-a73e-a0c89ccc867c')
+} catch (err) {
+  if (err instanceof TrutoTimeoutError) {
+    // retry later
+  } else if (err instanceof TrutoError) {
+    console.log(err.statusCode, err.data)
+  }
+}
+```
 
 ### Retry Options
 The SDK provides built-in retry mechanisms to handle rate limits and transient failures. You can customize this behavior using the following options:
@@ -198,7 +240,7 @@ await trutoApi.unifiedApi.create(formData, {
 });
 
 // Upload with body passthrough (sends FormData directly to integration)
-await trutoApi.unifiedApi.create('documents', formData, {
+await trutoApi.unifiedApi.create(formData, {
   unified_model: 'file-storage',
   resource: 'drive-items',
   integrated_account_id: '766cc1ee-6637-4aa1-a73e-a0c89ccc867c',
