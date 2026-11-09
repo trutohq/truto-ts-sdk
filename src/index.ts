@@ -128,6 +128,8 @@ export type {
   DateTimeRange,
   RequestType,
   LogTypeFilter,
+  LogFilterByType,
+  LogFilterFor,
   UnifiedProxyApiLogFilter,
   RapidBridgeLogFilter,
   WebhookLogFilter,

@@ -90,7 +90,7 @@ const allTools = await trutoApi.integratedAccount.tools('766cc1ee-6637-4aa1-a73e
 console.log(allTools)
 ```
 
-`methods` accepts a method name (`list`, `get`, `create`, `update`, `delete`, or a custom method name) or a group: `read` (list and get), `write` (create, update and delete), or `custom` (everything else). Until [trutohq/truto#2306](https://github.com/trutohq/truto/pull/2306) ships, pass one entry: the SDK sends multiple entries as a single comma-separated value (`list,get`), which the API currently treats as one method name and matches nothing. To get list and get tools together, use `['read']`. `tags` works the same way.
+`methods` accepts a method name (`list`, `get`, `create`, `update`, `delete`, or a custom method name) or a group: `read` (list and get), `write` (create, update and delete), or `custom` (everything else). Until [trutohq/truto#2355](https://github.com/trutohq/truto/pull/2355) ships, pass one entry: the SDK sends multiple entries as a single comma-separated value (`list,get`), which the API currently treats as one method name and matches nothing. To get list and get tools together, use `['read']`. `tags` works the same way.
 
 Each tool in the response includes:
 - `resource`: The resource name (e.g., 'tickets', 'accounts')

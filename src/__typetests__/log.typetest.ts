@@ -31,6 +31,24 @@ export const proxy: LogQueryParams = {
 // @ts-expect-error not a log type
 export const badType: LogQueryParams = { log_type: 'nope' }
 
+// A literal log type rejects another type's filter keys, through list() too.
+truto.log.list({
+  log_type: 'mcp',
+  // @ts-expect-error request_type is a unified_proxy_api filter key, not an mcp one
+  log_type_filter: { request_type: 'proxy' },
+})
+export const wrongKey: LogQueryParams = {
+  log_type: 'mcp',
+  // @ts-expect-error request_type is not an mcp filter key
+  log_type_filter: { request_type: 'proxy' },
+}
+export const narrowed: LogQueryParams<'webhook'> = {
+  log_type: 'webhook',
+  log_type_filter: { event: 'integrated_account:created' },
+}
+// Literal calls with the right keys compile.
+truto.log.list({ log_type: 'webhook', log_type_filter: { webhook_id: 'w' } })
+
 // Helper types are exported.
 export const value: LogFilterValue = ['x']
 export const range: DateTimeRange = { gt: 'x', lt: 'y' }

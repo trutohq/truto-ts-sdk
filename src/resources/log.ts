@@ -78,23 +78,26 @@ type LogQueryBase = {
   created_at?: DateTimeRange
 }
 
-export type LogQueryParams = LogQueryBase &
-  (
-    | {
-        log_type: 'unified_proxy_api'
-        log_type_filter?: UnifiedProxyApiLogFilter
-      }
-    | { log_type: 'rapid_bridge'; log_type_filter?: RapidBridgeLogFilter }
-    | { log_type: 'webhook'; log_type_filter?: WebhookLogFilter }
-    | { log_type: 'mcp'; log_type_filter?: McpLogFilter }
-    | {
-        log_type: 'sync_job_cron_trigger'
-        log_type_filter?: SyncJobCronTriggerLogFilter
-      }
-    // Fallback for callers holding a non-literal `LogType` (for example a
-    // wrapper that takes `log_type: LogType`), so they keep compiling.
-    | { log_type: LogType; log_type_filter?: LogTypeFilter }
-  )
+/** The `log_type_filter` shape for each `log_type`. */
+export type LogFilterByType = {
+  unified_proxy_api: UnifiedProxyApiLogFilter
+  rapid_bridge: RapidBridgeLogFilter
+  webhook: WebhookLogFilter
+  mcp: McpLogFilter
+  sync_job_cron_trigger: SyncJobCronTriggerLogFilter
+}
+
+/** The `log_type_filter` accepted for log type `L`. */
+export type LogFilterFor<L extends LogType> = LogFilterByType[L]
+
+/**
+ * Log query parameters. With a literal `log_type` the filter is narrowed to
+ * that type's keys; `LogQueryParams` without an argument is the union of all
+ * of them, each still strict.
+ */
+export type LogQueryParams<L extends LogType = LogType> = L extends LogType
+  ? LogQueryBase & { log_type: L; log_type_filter?: LogFilterFor<L> }
+  : never
 
 export type Log = {
   _id: string
@@ -104,7 +107,14 @@ export type Log = {
 
 export class LogResource {
   constructor(private apiClient: ApiClient) {}
-  public list(options: PaginationOptions & LogQueryParams) {
+  /**
+   * Generic over the log type: a literal `log_type` only accepts that type's
+   * filter keys, and a non-literal `LogType` accepts any `LogTypeFilter`.
+   */
+  public list<L extends LogType>(
+    options: PaginationOptions &
+      LogQueryBase & { log_type: L; log_type_filter?: LogFilterFor<L> }
+  ) {
     return new Cursor<Log>(this.apiClient, 'log', options)
   }
 }
