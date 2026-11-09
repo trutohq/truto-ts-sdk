@@ -124,6 +124,9 @@ export { TrutoError, TrutoTimeoutError } from './errors'
 export type {
   LogType,
   LogQueryParams,
+  LogFilterValue,
+  DateTimeRange,
+  RequestType,
   LogTypeFilter,
   UnifiedProxyApiLogFilter,
   RapidBridgeLogFilter,

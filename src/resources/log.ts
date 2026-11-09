@@ -91,6 +91,9 @@ export type LogQueryParams = LogQueryBase &
         log_type: 'sync_job_cron_trigger'
         log_type_filter?: SyncJobCronTriggerLogFilter
       }
+    // Fallback for callers holding a non-literal `LogType` (for example a
+    // wrapper that takes `log_type: LogType`), so they keep compiling.
+    | { log_type: LogType; log_type_filter?: LogTypeFilter }
   )
 
 export type Log = {
