@@ -120,3 +120,19 @@ export default class TrutoApi {
 
 export { Cursor } from './pagination'
 export { RequestQueue } from './requestQueue'
+export { TrutoError, TrutoTimeoutError } from './errors'
+export type {
+  LogType,
+  LogQueryParams,
+  LogFilterValue,
+  DateTimeRange,
+  RequestType,
+  LogTypeFilter,
+  LogFilterByType,
+  LogFilterFor,
+  UnifiedProxyApiLogFilter,
+  RapidBridgeLogFilter,
+  WebhookLogFilter,
+  McpLogFilter,
+  SyncJobCronTriggerLogFilter,
+} from './resources/log'
