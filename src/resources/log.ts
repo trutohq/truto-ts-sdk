@@ -7,6 +7,7 @@ export type LogType =
   | 'webhook'
   | 'mcp'
   | 'sync_job_cron_trigger'
+  | 'audit'
 export type RequestType = 'proxy' | 'unified'
 
 export type DateTimeRange = {
@@ -65,6 +66,49 @@ export type SyncJobCronTriggerLogFilter = {
   environment_id?: LogFilterValue
 }
 
+/** Who made an audited change. Any other value is refused with a 400. */
+export type AuditActorType =
+  | 'user'
+  | 'api_token'
+  | 'truto_staff'
+  | 'end_user'
+  | 'integrated_account'
+  | 'scim'
+  | 'system'
+
+/**
+ * What an audited change did, read from the end of `audit_action`. Any other
+ * value is refused with a 400.
+ */
+export type AuditActionKind = 'created' | 'updated' | 'deleted' | 'other'
+
+/**
+ * `log_type_filter` keys accepted for `log_type: 'audit'` (the team's audit
+ * log). The audit log is scoped to a team, not an environment: `team_id` is
+ * required by the API (a 400 without it), and the caller must be an admin of
+ * that team or use an API token issued for it.
+ */
+export type AuditLogFilter = {
+  /** Required by the API: the team whose audit log to read. */
+  team_id?: string
+  environment_id?: LogFilterValue
+  /** An action key such as `webhook.updated`. */
+  audit_action?: LogFilterValue
+  audit_action_kind?: AuditActionKind
+  audit_actor_type?: AuditActorType | AuditActorType[]
+  /** The dashboard user who acted. */
+  user_id?: LogFilterValue
+  /** The kind of object changed, e.g. `webhook`; an array matches any of them. */
+  audit_target_type?: LogFilterValue
+  audit_target_id?: LogFilterValue
+  request_id?: LogFilterValue
+  /**
+   * Case-insensitive text over the action, the actor's name and the target's
+   * name and id. Every word (up to 5) must appear. At most 100 characters.
+   */
+  search?: string
+}
+
 /** Any `log_type_filter`. Keys not valid for the chosen `log_type` are ignored by the API. */
 export type LogTypeFilter =
   | UnifiedProxyApiLogFilter
@@ -72,9 +116,13 @@ export type LogTypeFilter =
   | WebhookLogFilter
   | McpLogFilter
   | SyncJobCronTriggerLogFilter
+  | AuditLogFilter
 
 type LogQueryBase = {
-  /** `gt` and `lt` must be at most one month apart. `lt` is required when `gt` is set. */
+  /**
+   * `gt` and `lt` must be at most one month apart (90 days for `audit`).
+   * `lt` is required when `gt` is set.
+   */
   created_at?: DateTimeRange
 }
 
@@ -85,6 +133,7 @@ export type LogFilterByType = {
   webhook: WebhookLogFilter
   mcp: McpLogFilter
   sync_job_cron_trigger: SyncJobCronTriggerLogFilter
+  audit: AuditLogFilter
 }
 
 /** The `log_type_filter` accepted for log type `L`. */
