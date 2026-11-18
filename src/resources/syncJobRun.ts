@@ -34,7 +34,8 @@ export type SyncJobRunPatchPayload = {
   resource_stats?: Record<string, unknown>
   /**
    * @deprecated Truto sets a run's status as it runs, and the API answers 400
-   * (`sync_job_run_read_only_field`) to a PATCH that sends it. To stop a run,
+   * (`sync_job_run_read_only_field`) to a PATCH that sends it, except
+   * `"stopped"`, which stops the run as `delete(id)` does. To stop a run,
    * call `delete(id)`; to run the job again, `create()` a new run.
    */
   status?: string
