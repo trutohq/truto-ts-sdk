@@ -80,18 +80,23 @@ export type AuditActorType =
  * What an audited change did, read from the end of `audit_action`. Any other
  * value is refused with a 400.
  */
-export type AuditActionKind = 'created' | 'updated' | 'deleted' | 'other'
+export type AuditActionKind =
+  | 'created'
+  | 'updated'
+  | 'deleted'
+  | 'failed'
+  | 'other'
 
 /**
  * `log_type_filter` keys accepted for `log_type: 'audit'` (the team's audit
  * log). The audit log is scoped to a team, not an environment: `team_id` is
- * required by the API (a 400 without it), and the caller must be an admin of
+ * required (the API answers 400 without it), and the caller must be an admin of
  * that team or use an API token issued for it. An API token reads only the
  * rows of its own environment.
  */
 export type AuditLogFilter = {
-  /** Required by the API: the team whose audit log to read. */
-  team_id?: string
+  /** The team whose audit log to read. The API answers 400 without it. */
+  team_id: string
   environment_id?: LogFilterValue
   /** An action key such as `webhook.updated`. */
   audit_action?: LogFilterValue
@@ -141,12 +146,21 @@ export type LogFilterByType = {
 export type LogFilterFor<L extends LogType> = LogFilterByType[L]
 
 /**
+ * `log_type_filter` as a parameter: required for `audit`, which the API
+ * refuses without `team_id`, optional for every other type. Not distributed,
+ * so a non-literal `LogType` keeps it optional.
+ */
+type LogFilterParam<L extends LogType> = [L] extends ['audit']
+  ? { log_type_filter: AuditLogFilter }
+  : { log_type_filter?: LogFilterFor<L> }
+
+/**
  * Log query parameters. With a literal `log_type` the filter is narrowed to
  * that type's keys; `LogQueryParams` without an argument is the union of all
  * of them, each still strict.
  */
 export type LogQueryParams<L extends LogType = LogType> = L extends LogType
-  ? LogQueryBase & { log_type: L; log_type_filter?: LogFilterFor<L> }
+  ? LogQueryBase & { log_type: L } & LogFilterParam<L>
   : never
 
 export type Log = {
@@ -163,7 +177,7 @@ export class LogResource {
    */
   public list<L extends LogType>(
     options: PaginationOptions &
-      LogQueryBase & { log_type: L; log_type_filter?: LogFilterFor<L> }
+      LogQueryBase & { log_type: L } & LogFilterParam<L>
   ) {
     return new Cursor<Log>(this.apiClient, 'log', options)
   }

@@ -89,10 +89,30 @@ truto.log.list({
   log_type_filter: { audit_action: 'webhook.updated' },
 })
 
+// The audit log needs its team: no filter, or a filter without `team_id`, is
+// an error, as the API answers 400 for either (Uday, 19 Nov).
+// @ts-expect-error log_type_filter is required for audit
+truto.log.list({ log_type: 'audit' })
+truto.log.list({
+  log_type: 'audit',
+  // @ts-expect-error team_id is required for audit
+  log_type_filter: { search: 'x' },
+})
+// @ts-expect-error team_id is required for audit
+export const noTeam: LogQueryParams<'audit'> = { log_type: 'audit' }
+truto.log.list({
+  log_type: 'audit',
+  log_type_filter: { team_id: 't', audit_action_kind: 'failed' },
+})
+// Other types keep the filter optional.
+truto.log.list({ log_type: 'mcp' })
+
 // Helper types are exported.
 export const value: LogFilterValue = ['x']
 export const range: DateTimeRange = { gt: 'x', lt: 'y' }
 export const requestType: RequestType = 'unified'
 export const auditFilter: AuditLogFilter = { team_id: 't' }
+// @ts-expect-error team_id is required
+export const auditFilterNoTeam: AuditLogFilter = { search: 'x' }
 export const actorType: AuditActorType = 'system'
 export const actionKind: AuditActionKind = 'other'

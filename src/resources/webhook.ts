@@ -71,10 +71,15 @@ export class WebhookResource {
   public delete(id: string, queryParams?: Record<string, unknown>) {
     return this.apiClient.delete('webhook', id, queryParams)
   }
+  /**
+   * Sends one test event. Never retried: the API answers 502 when the
+   * endpoint refuses the event, and a retry would send it again.
+   */
   public test(body: WebhookTestPayload) {
     return this.apiClient.request<WebhookTestResponse>('webhook/test', {
       method: 'POST',
       body,
+      noRetry: true,
     })
   }
 }

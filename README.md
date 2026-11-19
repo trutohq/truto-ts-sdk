@@ -130,11 +130,11 @@ const logs = await trutoApi.log
 | `webhook` | `webhook_id`, `event`, `integrated_account_id`, `environment_id`, `integration` |
 | `mcp` | `integrated_account_id`, `mcp_server_id`, `mcp_method`, `tool_name`, `resource`, `method`, `client_name`, `client_version`, `request_id`, `environment_id`, `integration` |
 | `sync_job_cron_trigger` | `environment_id` |
-| `audit` | `team_id` (required), `environment_id`, `audit_action`, `audit_action_kind` (`created`, `updated`, `deleted`, `other`), `audit_actor_type`, `user_id`, `audit_target_type`, `audit_target_id`, `request_id`, `search` |
+| `audit` | `team_id` (required), `environment_id`, `audit_action`, `audit_action_kind` (`created`, `updated`, `deleted`, `failed`, `other`), `audit_actor_type`, `user_id`, `audit_target_type`, `audit_target_id`, `request_id`, `search` |
 
 Each filter value can be a string or an array of strings to match any of them, except `team_id`, `audit_action_kind` and `search`, which take one value.
 
-The audit log belongs to a team, not an environment: pass the team's ID as `team_id`. An admin of that team reads all of it; an API token issued for the team reads only its own environment's entries. Each entry carries the same fixed set of fields: `timestamp`, `log_type`, `team_id`, `environment_id`, the `audit_*` fields, `user_id`, `api_token_id`, and the request's `http_method`, `http_url`, `http_status_code`, `http_request_id`, `http_ip`, `http_useragent` and `http_country`.
+The audit log belongs to a team, not an environment: pass the team's ID as `team_id` (TypeScript requires it, since the API refuses a request without it). An admin of that team reads all of it; an API token issued for the team reads only its own environment's entries. Each entry carries the same fixed set of fields: `timestamp`, `log_type`, `team_id`, `environment_id`, the `audit_*` fields, `user_id`, `api_token_id`, and the request's `http_method`, `http_url`, `http_status_code`, `http_request_id`, `http_ip`, `http_useragent` and `http_country`.
 
 ```javascript
 const deletions = await trutoApi.log
@@ -166,7 +166,7 @@ try {
 ```
 
 ### Retry Options
-The SDK provides built-in retry mechanisms to handle rate limits and transient failures. You can customize this behavior using the following options:
+The SDK provides built-in retry mechanisms to handle rate limits and transient failures. `webhook.test()` is never retried: it sends a test event, and the API answers 502 when your endpoint refuses it, so a retry would send the event again. You can customize this behavior using the following options:
 
 ```javascript
 // Example with retry options
