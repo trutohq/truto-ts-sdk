@@ -86,7 +86,8 @@ export type AuditActionKind = 'created' | 'updated' | 'deleted' | 'other'
  * `log_type_filter` keys accepted for `log_type: 'audit'` (the team's audit
  * log). The audit log is scoped to a team, not an environment: `team_id` is
  * required by the API (a 400 without it), and the caller must be an admin of
- * that team or use an API token issued for it.
+ * that team or use an API token issued for it. An API token reads only the
+ * rows of its own environment.
  */
 export type AuditLogFilter = {
   /** Required by the API: the team whose audit log to read. */

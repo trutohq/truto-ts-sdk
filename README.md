@@ -134,7 +134,7 @@ const logs = await trutoApi.log
 
 Each filter value can be a string or an array of strings to match any of them, except `team_id`, `audit_action_kind` and `search`, which take one value.
 
-The audit log belongs to a team, not an environment: pass the team's ID as `team_id`. Only an admin of that team, or an API token issued for it, can read it.
+The audit log belongs to a team, not an environment: pass the team's ID as `team_id`. An admin of that team reads all of it; an API token issued for the team reads only its own environment's entries. Each entry carries the same fixed set of fields: `timestamp`, `log_type`, `team_id`, `environment_id`, the `audit_*` fields, `user_id`, `api_token_id`, and the request's `http_method`, `http_url`, `http_status_code`, `http_request_id`, `http_ip`, `http_useragent` and `http_country`.
 
 ```javascript
 const deletions = await trutoApi.log
@@ -144,7 +144,9 @@ const deletions = await trutoApi.log
     log_type_filter: { team_id: '<team_id>', audit_action_kind: 'deleted' },
   })
   .toArray()
-``` `created_at.gt` and `created_at.lt` can be at most one month apart (90 days for `audit`), and `lt` is required when you set `gt`.
+```
+
+`created_at.gt` and `created_at.lt` can be at most one month apart (90 days for `audit`), and `lt` is required when you set `gt`.
 
 ### Errors
 A failed request throws a `TrutoError` with `statusCode`, `statusText`, `response`, and `data` (the parsed response body, when there is one). A request that runs past its timeout throws a `TrutoTimeoutError`, which extends `TrutoError`. Both are exported from the package:
