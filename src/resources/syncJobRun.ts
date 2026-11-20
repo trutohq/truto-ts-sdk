@@ -1,5 +1,6 @@
 import { ApiClient } from '../apiClient'
 import { PaginationOptions, Cursor } from '../pagination'
+import type { SyncJobRunErrorHandling } from './syncJobCronTrigger'
 
 export type SyncJobRun = {
   id: string
@@ -27,8 +28,20 @@ export type SyncJobRunCreatePayload = {
 }
 
 export type SyncJobRunPatchPayload = {
+  meta?: Record<string, unknown>
+  error_handling?: SyncJobRunErrorHandling | null
+  delay_between_requests_ms?: number | null
+  resource_stats?: Record<string, unknown>
+  /**
+   * @deprecated Truto sets a run's status as it runs, and the API answers 400
+   * (`sync_job_run_read_only_field`) to a PATCH that sends it, except
+   * `"stopped"`, which stops the run as `delete(id)` does. To stop a run,
+   * call `delete(id)`; to run the job again, `create()` a new run.
+   */
   status?: string
+  /** @deprecated Set by Truto; the API answers 400 to a PATCH that sends it. */
   started_at?: string
+  /** @deprecated Set by Truto; the API answers 400 to a PATCH that sends it. */
   finished_at?: string
 }
 
