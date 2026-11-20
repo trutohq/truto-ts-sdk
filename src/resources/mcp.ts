@@ -40,7 +40,7 @@ export class Mcp {
     public async call(token: string, payload: McpPayload, queryParams?: McpQueryParams) {
         const queryString = qs.stringify(queryParams)
         return this.apiClient.request(
-            `mcp/${token}${queryString ? `?${queryString}` : ''}`,
+            `/mcp/${token}${queryString ? `?${queryString}` : ''}`,
             {
                 method: 'POST',
                 body: JSON.stringify(payload)

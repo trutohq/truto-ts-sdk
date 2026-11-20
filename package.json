@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Truto REST API SDK for TypeScript. Works in NodeJS & Cloudflare Workers.",
   "repository": {
     "type": "git",
@@ -71,7 +71,8 @@
     "dev": "parcel watch",
     "build": "rm -rf dist && parcel build",
     "check": "tsc --noEmit",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "test": "yarn build && node --test 'test/**/*.test.mjs'"
   },
   "resolutions": {
     "baseline-browser-mapping": "2.11.25",

@@ -135,4 +135,7 @@ export type {
   WebhookLogFilter,
   McpLogFilter,
   SyncJobCronTriggerLogFilter,
+  AuditLogFilter,
+  AuditActorType,
+  AuditActionKind,
 } from './resources/log'

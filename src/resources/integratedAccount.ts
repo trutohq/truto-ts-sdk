@@ -61,7 +61,7 @@ export class IntegratedAccountResource {
 
   public refreshCredentials(id: string, queryParams?: Record<string, unknown>) {
     return this.apiClient.request<{ success: boolean }>(
-      `integrated-account/refresh-credentials`,
+      `/integrated-account/refresh-credentials`,
       {
         method: 'POST',
         body: JSON.stringify({
