@@ -67,7 +67,7 @@ export class DaemonJobCronTriggerResource {
   }
   public schedule(id: string) {
     return this.apiClient.request<{ success: boolean }>(
-      `daemon-job-cron-trigger/${id}/schedule`,
+      `/daemon-job-cron-trigger/${id}/schedule`,
       {
         method: 'POST',
       }

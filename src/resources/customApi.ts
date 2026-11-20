@@ -13,7 +13,7 @@ export class CustomApi {
     public async get(path: string, queryParams?: CustomApiQueryParams) {
         const queryString = qs.stringify(queryParams)
         return this.apiClient.request(
-            `custom/${path}${queryString ? `?${queryString}` : ''}`,
+            `/custom/${path}${queryString ? `?${queryString}` : ''}`,
             {
                 method: 'GET',
             }
@@ -27,7 +27,7 @@ export class CustomApi {
     ) {
         const queryString = qs.stringify(queryParams)
         return this.apiClient.request(
-            `custom/${path}${queryString ? `?${queryString}` : ''}`,
+            `/custom/${path}${queryString ? `?${queryString}` : ''}`,
             {
                 method: 'POST',
                 body: body ? JSON.stringify(body) : undefined,
@@ -42,7 +42,7 @@ export class CustomApi {
     ) {
         const queryString = qs.stringify(queryParams)
         return this.apiClient.request(
-            `custom/${path}${queryString ? `?${queryString}` : ''}`,
+            `/custom/${path}${queryString ? `?${queryString}` : ''}`,
             {
                 method: 'PUT',
                 body: body ? JSON.stringify(body) : undefined,
@@ -57,7 +57,7 @@ export class CustomApi {
     ) {
         const queryString = qs.stringify(queryParams)
         return this.apiClient.request(
-            `custom/${path}${queryString ? `?${queryString}` : ''}`,
+            `/custom/${path}${queryString ? `?${queryString}` : ''}`,
             {
                 method: 'PATCH',
                 body: body ? JSON.stringify(body) : undefined,
@@ -68,7 +68,7 @@ export class CustomApi {
     public async delete(path: string, queryParams?: CustomApiQueryParams) {
         const queryString = qs.stringify(queryParams)
         return this.apiClient.request(
-            `custom/${path}${queryString ? `?${queryString}` : ''}`,
+            `/custom/${path}${queryString ? `?${queryString}` : ''}`,
             {
                 method: 'DELETE',
             }

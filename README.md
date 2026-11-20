@@ -271,5 +271,7 @@ The `truto_body_passthrough` option is useful when you need to:
 ## Contributing
 We welcome contributions to improve `truto-ts-sdk`. Please submit issues or pull requests on the GitHub repository.
 
+`yarn run check` type-checks the source (including `src/__typetests__`), and `yarn test` builds the package and runs `test/` against the build with Node's test runner.
+
 ## License
 MIT

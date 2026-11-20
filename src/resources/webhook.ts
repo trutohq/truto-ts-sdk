@@ -76,7 +76,7 @@ export class WebhookResource {
    * endpoint refuses the event, and a retry would send it again.
    */
   public test(body: WebhookTestPayload) {
-    return this.apiClient.request<WebhookTestResponse>('webhook/test', {
+    return this.apiClient.request<WebhookTestResponse>('/webhook/test', {
       method: 'POST',
       body,
       noRetry: true,

@@ -97,7 +97,7 @@ export class DatastoreResource {
   }
   public test(id: string, method: string, body?: Record<string, unknown>) {
     return this.apiClient.request<DatastoreMethodResponse>(
-      `datastore/${id}/test/${method}`,
+      `/datastore/${id}/test/${method}`,
       {
         method: 'POST',
         body: body ? JSON.stringify(body) : undefined,

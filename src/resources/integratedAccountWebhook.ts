@@ -18,7 +18,7 @@ export class IntegratedAccountWebhookResource {
     ) {
         const queryString = qs.stringify(queryParams)
         return this.apiClient.request(
-            `integrated-account-webhook/${integratedAccountId}${queryString ? `?${queryString}` : ''}`,
+            `/integrated-account-webhook/${integratedAccountId}${queryString ? `?${queryString}` : ''}`,
             {
                 method: 'POST',
                 body: JSON.stringify(body),

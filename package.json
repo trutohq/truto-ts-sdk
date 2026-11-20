@@ -71,7 +71,8 @@
     "dev": "parcel watch",
     "build": "rm -rf dist && parcel build",
     "check": "tsc --noEmit",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "test": "yarn build && node --test 'test/**/*.test.mjs'"
   },
   "resolutions": {
     "baseline-browser-mapping": "2.11.25",
