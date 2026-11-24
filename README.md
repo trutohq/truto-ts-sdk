@@ -111,7 +111,7 @@ Truto already provides a toolset for the following LLM libraries
 - Langchain.js - https://github.com/trutohq/truto-langchainjs-toolset
 
 ### Logs
-`trutoApi.log.list()` reads logs for one `log_type` at a time: `unified_proxy_api`, `rapid_bridge` (sync job runs), `webhook` (outbound webhook deliveries), `mcp`, or `sync_job_cron_trigger`. `log_type_filter` takes keys specific to that log type, and TypeScript checks them for you:
+`trutoApi.log.list()` reads logs for one `log_type` at a time: `unified_proxy_api`, `rapid_bridge` (sync job runs), `webhook` (outbound webhook deliveries), `mcp`, `sync_job_cron_trigger`, or `audit` (your team's audit log). `log_type_filter` takes keys specific to that log type, and TypeScript checks them for you:
 
 ```javascript
 const logs = await trutoApi.log
@@ -130,8 +130,23 @@ const logs = await trutoApi.log
 | `webhook` | `webhook_id`, `event`, `integrated_account_id`, `environment_id`, `integration` |
 | `mcp` | `integrated_account_id`, `mcp_server_id`, `mcp_method`, `tool_name`, `resource`, `method`, `client_name`, `client_version`, `request_id`, `environment_id`, `integration` |
 | `sync_job_cron_trigger` | `environment_id` |
+| `audit` | `team_id` (required), `environment_id`, `audit_action`, `audit_action_kind` (`created`, `updated`, `deleted`, `failed`, `other`), `audit_actor_type`, `user_id`, `audit_target_type`, `audit_target_id`, `request_id`, `search` |
 
-Each filter value can be a string or an array of strings to match any of them. `created_at.gt` and `created_at.lt` can be at most one month apart, and `lt` is required when you set `gt`.
+Each filter value can be a string or an array of strings to match any of them, except `team_id`, `audit_action_kind` and `search`, which take one value.
+
+The audit log belongs to a team, not an environment: pass the team's ID as `team_id` (TypeScript requires it, since the API refuses a request without it). An admin of that team reads all of it; an API token issued for the team reads only its own environment's entries. Each entry carries the same fixed set of fields: `timestamp`, `log_type`, `team_id`, `environment_id`, the `audit_*` fields, `user_id`, `api_token_id`, and the request's `http_method`, `http_url`, `http_status_code`, `http_request_id`, `http_ip`, `http_useragent` and `http_country`.
+
+```javascript
+const deletions = await trutoApi.log
+  .list({
+    log_type: 'audit',
+    created_at: { gt: '2026-11-01T00:00:00Z', lt: '2026-11-18T00:00:00Z' },
+    log_type_filter: { team_id: '<team_id>', audit_action_kind: 'deleted' },
+  })
+  .toArray()
+```
+
+`created_at.gt` and `created_at.lt` can be at most one month apart (90 days for `audit`), and `lt` is required when you set `gt`.
 
 ### Errors
 A failed request throws a `TrutoError` with `statusCode`, `statusText`, `response`, and `data` (the parsed response body, when there is one). A request that runs past its timeout throws a `TrutoTimeoutError`, which extends `TrutoError`. Both are exported from the package:
@@ -151,7 +166,7 @@ try {
 ```
 
 ### Retry Options
-The SDK provides built-in retry mechanisms to handle rate limits and transient failures. You can customize this behavior using the following options:
+The SDK provides built-in retry mechanisms to handle rate limits and transient failures. `webhook.test()` is never retried: it sends a test event, and the API answers 502 when your endpoint refuses it, so a retry would send the event again. You can customize this behavior using the following options:
 
 ```javascript
 // Example with retry options
@@ -255,6 +270,8 @@ The `truto_body_passthrough` option is useful when you need to:
 
 ## Contributing
 We welcome contributions to improve `truto-ts-sdk`. Please submit issues or pull requests on the GitHub repository.
+
+`yarn run check` type-checks the source (including `src/__typetests__`), and `yarn test` builds the package and runs `test/` against the build with Node's test runner.
 
 ## License
 MIT

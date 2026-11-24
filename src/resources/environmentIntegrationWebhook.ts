@@ -18,7 +18,7 @@ export class EnvironmentIntegrationWebhookResource {
     ) {
         const queryString = qs.stringify(queryParams)
         return this.apiClient.request(
-            `environment-integration-webhook/${environmentIntegrationId}${queryString ? `?${queryString}` : ''}`,
+            `/environment-integration-webhook/${environmentIntegrationId}${queryString ? `?${queryString}` : ''}`,
             {
                 method: 'POST',
                 body: JSON.stringify(body),

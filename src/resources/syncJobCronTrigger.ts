@@ -90,7 +90,7 @@ export class SyncJobCronTriggerResource {
   }
   public schedule(id: string) {
     return this.apiClient.request<{ success: boolean }>(
-      `sync-job-cron-trigger/${id}/schedule`,
+      `/sync-job-cron-trigger/${id}/schedule`,
       {
         method: 'POST',
       }

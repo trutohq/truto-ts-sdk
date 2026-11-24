@@ -75,7 +75,7 @@ export class ApiClient {
     do {
       try {
         response = await pTimeout(
-          fetch(`${this.baseUrl}${endpoint}`, {
+          fetch(joinUrl(this.baseUrl, endpoint), {
             ...init,
             headers,
           }),
@@ -198,4 +198,13 @@ export class ApiClient {
       }
     )
   }
+}
+
+/**
+ * `baseUrl` and `endpoint` with exactly one `/` between them. Several
+ * resources passed paths with no leading `/` (`webhook/test`, `custom/…`), and
+ * plain concatenation sent them to `https://api.truto.onewebhook/test`.
+ */
+export function joinUrl(baseUrl: string, endpoint: string): string {
+  return `${baseUrl.replace(/\/+$/, '')}/${endpoint.replace(/^\/+/, '')}`
 }

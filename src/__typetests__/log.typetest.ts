@@ -8,6 +8,9 @@ import type {
   LogFilterValue,
   DateTimeRange,
   RequestType,
+  AuditLogFilter,
+  AuditActorType,
+  AuditActionKind,
 } from '../index'
 
 declare const truto: TrutoApi
@@ -49,7 +52,67 @@ export const narrowed: LogQueryParams<'webhook'> = {
 // Literal calls with the right keys compile.
 truto.log.list({ log_type: 'webhook', log_type_filter: { webhook_id: 'w' } })
 
+// The audit log takes its own keys.
+truto.log.list({
+  log_type: 'audit',
+  log_type_filter: {
+    team_id: 't',
+    audit_action_kind: 'deleted',
+    audit_actor_type: ['user', 'api_token'],
+    audit_target_type: ['webhook', 'datastore'],
+    search: 'webhook priya',
+  },
+  created_at: { gt: '2026-08-20T00:00:00Z', lt: '2026-11-18T00:00:00Z' },
+})
+export const audit: LogQueryParams<'audit'> = {
+  log_type: 'audit',
+  log_type_filter: { team_id: 't', audit_action: 'webhook.updated' },
+}
+truto.log.list({
+  log_type: 'audit',
+  // @ts-expect-error not an actor type
+  log_type_filter: { team_id: 't', audit_actor_type: 'robot' },
+})
+truto.log.list({
+  log_type: 'audit',
+  // @ts-expect-error the API takes one action kind, not a list
+  log_type_filter: { team_id: 't', audit_action_kind: ['created', 'deleted'] },
+})
+truto.log.list({
+  log_type: 'audit',
+  // @ts-expect-error mcp_server_id is an mcp filter key, not an audit one
+  log_type_filter: { team_id: 't', mcp_server_id: 'm' },
+})
+truto.log.list({
+  log_type: 'mcp',
+  // @ts-expect-error audit_action is an audit filter key, not an mcp one
+  log_type_filter: { audit_action: 'webhook.updated' },
+})
+
+// The audit log needs its team: no filter, or a filter without `team_id`, is
+// an error, as the API answers 400 for either (Uday, 19 Nov).
+// @ts-expect-error log_type_filter is required for audit
+truto.log.list({ log_type: 'audit' })
+truto.log.list({
+  log_type: 'audit',
+  // @ts-expect-error team_id is required for audit
+  log_type_filter: { search: 'x' },
+})
+// @ts-expect-error team_id is required for audit
+export const noTeam: LogQueryParams<'audit'> = { log_type: 'audit' }
+truto.log.list({
+  log_type: 'audit',
+  log_type_filter: { team_id: 't', audit_action_kind: 'failed' },
+})
+// Other types keep the filter optional.
+truto.log.list({ log_type: 'mcp' })
+
 // Helper types are exported.
 export const value: LogFilterValue = ['x']
 export const range: DateTimeRange = { gt: 'x', lt: 'y' }
 export const requestType: RequestType = 'unified'
+export const auditFilter: AuditLogFilter = { team_id: 't' }
+// @ts-expect-error team_id is required
+export const auditFilterNoTeam: AuditLogFilter = { search: 'x' }
+export const actorType: AuditActorType = 'system'
+export const actionKind: AuditActionKind = 'other'
