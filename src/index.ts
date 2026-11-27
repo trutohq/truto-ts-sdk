@@ -37,6 +37,9 @@ import { StaticGateResource } from './resources/staticGate'
 export type TrutoApiOptions = {
   baseUrl?: string
   token: string
+  // Added after the SDK's own name in the User-Agent, for a package built on
+  // this SDK to name itself: 'langchain-toolset/0.1.8'.
+  userAgentSuffix?: string
 }
 
 export default class TrutoApi {

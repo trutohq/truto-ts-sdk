@@ -7,6 +7,9 @@ import { TrutoError, TrutoTimeoutError } from './errors'
 export type ApiClientOptions = {
   baseUrl?: string
   token: string
+  // Added after the SDK's own name in the User-Agent, for a package built on
+  // this SDK to name itself: 'langchain-toolset/0.1.8'.
+  userAgentSuffix?: string
 }
 
 export type ApiClientRequestOptions = {
@@ -23,10 +26,15 @@ export type ApiClientRequestOptions = {
 export class ApiClient {
   private baseUrl: string
   private token: string
+  private userAgent: string
 
   constructor(options: ApiClientOptions) {
     this.baseUrl = options.baseUrl || 'https://api.truto.one'
     this.token = options.token
+    const suffix = options.userAgentSuffix?.trim()
+    this.userAgent = suffix
+      ? `truto-ts-sdk/${packageJson.version} ${suffix}`
+      : `truto-ts-sdk/${packageJson.version}`
   }
 
   async parseResponseBody<T>(response: Response): Promise<T> {
@@ -57,7 +65,7 @@ export class ApiClient {
       Accept: 'application/json',
       Authorization: `Bearer ${this.token}`,
       ...(init?.headers as Record<string, string>),
-      'User-Agent': `truto-ts-sdk/${packageJson.version}`,
+      'User-Agent': this.userAgent,
     }
 
     if (isPlainObject(init?.body) || isArray(init?.body)) {
